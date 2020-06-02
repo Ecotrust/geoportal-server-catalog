@@ -24,7 +24,7 @@
   <beans:import resource="${gpt_authentication:authentication-simple.xml}"/>
   
   <beans:import resource="app-oauth.xml"/>
-  <security:http realm="Geoportal" pattern="/**" authentication-manager-ref="authenticationManager">
+  <security:http realm="Geoportal" pattern="/**" authentication-manager-ref="authenticationManager" use-expressions="true">
     <security:headers>
        <security:frame-options policy="SAMEORIGIN"/>
        <security:header name="Access-Control-Allow-Origin" value="*" />
@@ -33,6 +33,7 @@
     <security:csrf disabled="true"/>
     <security:http-basic />
     <security:custom-filter ref="oauthResourceFilter" before="PRE_AUTH_FILTER" />
+    <security:remember-me key="uniqueAndSecret"  user-service-ref="userService" />
     <security:intercept-url pattern="/" access="permitAll" />
     
     <!-- /rest/metadata/ - the metadata catalog -->
