@@ -143,3 +143,9 @@ geoportal/nb-configuration.xml
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
+
+### WCOA Settings
+geoportal/src/main/resources/config/app-security.xml
+geoportal/src/main/resources/config/authentication-arcgis.xml
+geoportal/src/main/resources/config/authentication-ldap.xml
+geoportal/src/main/resources/config/authentication-simple.xml
