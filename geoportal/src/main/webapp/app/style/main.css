@@ -11,7 +11,8 @@ body,
 body {
   margin: 0;
   overflow: hidden;
-  background-color: #f3f3f3;
+  /* background-color: #f3f3f3; */
+  background-color: white;
   font-size: 16px;
 }
 
@@ -41,7 +42,7 @@ body {
 /* STYLES */
 /* Note: you need to match or trump Calcite-Bootstrap specificity */
 
-/* 
+/*
 .g-app .tab-content {
   height: calc(100% - 113px);
 }
@@ -145,6 +146,7 @@ body {
   justify-content: space-between;
   padding: 0 70px;
   background-color: #fff;
+  min-height: 100px;
 }
 
 .g-header .navbar-nav {
@@ -262,8 +264,9 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  background: #0670ae;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+  /* background: #0670ae; */
+  background: transparent;
+  /* box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25); */
 }
 
 .g-search-bar {
@@ -278,24 +281,32 @@ body {
   margin-right: 16px;
   font-size: 20px;
   color: #fff;
+  display: none;
 }
 
 /* SEARCH PANEL - SEARCH INPUT OVERRIDES */
 .g-search-bar .search-box {
-  width: calc(70% - 48px);
-  padding: 0px 16px;
+  /* width: calc(70% - 48px); */
+  width: 30%;
+  /* padding: 0px 16px; */
 }
 
 .g-search-bar .search-box .input-group {
   display: flex;
   align-items: center;
   background: #fff;
+  border: 1px solid #ff3817;
+  border-radius: 3px;
 }
 
 .g-search-bar .search-box .input-group input {
-  width: calc(100% - 151px);
-  padding: 8px 4px;
-  font-size: 16px;
+  /* width: calc(100% - 151px); */
+  width: calc(100% - 60px);
+  /* padding: 8px 4px; */
+  padding: 8px 10px;
+  /* font-size: 16px; */
+  font-size: 14px;
+  font-family: PtMono, "Courier New", Courier, monospace;
 }
 
 .g-search-bar .search-box .input-group input:focus {
@@ -307,19 +318,29 @@ body {
 }
 
 .g-search-bar .search-box .esri-icon-search {
-  margin: 0 25px 0 15px;
-  font-size: 16px;
-  color: #404040;
+  /* margin: 0 25px 0 15px; */
+  margin: 0 5px 0 10px;
+  /* font-size: 16px; */
+  font-size: 14px;
+  /* color: #404040; */
+  color: #515151;
+  display: none;
 }
 
 .g-search-bar .search-box .btn {
   display: flex;
   align-items: center;
   height: 36px;
-  padding: 0 25px;
+  /* padding: 0 25px; */
+  padding: 0 5px;
   border: 1px solid #fff;
-  background: #004874;
+  /* background: #004874; */
+  background: transparent;
   font-size: 14px;
+  background-image: url("https://catalog.westcoastoceans.org/assets/img/icons/black_search.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: transparent;
 }
 
 /* SEARCH PANEL - CONTENT */
@@ -337,6 +358,8 @@ body {
 .g-search-pane-right {
   width: calc(70% - 46px);
   /* padding: 15px 0; */
+  top: -60px;
+  position: relative;
 }
 
 .g-filter-collapse {
@@ -585,6 +608,7 @@ body {
   display: flex;
   justify-content: flex-end;
   /* border-bottom: 1px solid #e4e4e4; */
+  height: 4.5rem;
 }
 
 .g-search-results-sort {
@@ -662,6 +686,10 @@ body {
   top: 0;
   left: 0;
   margin-left: 16px;
+  color: #0070cf;
+  font-weight: 400;
+  font-family: OpenSans,sans-serif;
+  font-size: 22px;
 }
 .g-paging .pagination {
   margin: 0;
@@ -703,8 +731,13 @@ body {
   justify-content: space-between;
   margin: 12px 0;
   padding: 8px 8px 8px 12px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); */
+  border-top: dashed 1.111px rgb(166,166,166);
   background: #fff;
+}
+
+.g-item-card:last-child {
+  border-bottom: dashed 1px rgb(166,166,166);
 }
 
 .g-item-card-content {
