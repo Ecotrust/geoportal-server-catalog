@@ -1,1 +1,172 @@
 /* Custom CSS */
+
+/*
+ * Fonts, text, and icons
+ */
+.uppercase {
+  text-transform: uppercase;
+}
+.margin-top-1 {
+  margin-top: 10px;
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-LightItalic-webfont.eot');
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-LightItalic-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-LightItalic-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-LightItalic-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-LightItalic-webfont.svg#OpenSans-LightItalic') format('svg');
+  font-weight: 200;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Light-webfont.eot');
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Light-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Light-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Light-webfont.svg#OpenSans-Light') format('svg');
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-ExtraBold-webfont.eot');
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-ExtraBold-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-ExtraBold-webfont.svg#OpenSans-ExtraBold') format('svg');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Bold-webfont.eot');
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Bold-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Bold-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Bold-webfont.svg#OpenSans-Bold') format('svg');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Italic-webfont.eot');
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Italic-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Italic-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Italic-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Italic-webfont.svg#OpenSans-Italic') format('svg');
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'OpenSans';
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Regular-webfont.eot');
+  src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Regular-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Regular-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Regular-webfont.svg#OpenSans-Regular') format('svg');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'PtMono';
+  src: url('../../static/wcoa/fonts/PtMono/PtMono-Bold-webfont.eot');
+  src: url('../../static/wcoa/fonts/PtMono/PtMono-Bold-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/PtMono/PtMono-Bold-webfont.woff') format('woff'), url('../../static/wcoa/fonts/PtMono/PtMono-Bold-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/PtMono/PtMono-Bold-webfont.svg#PtMono-Bold') format('svg');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'PtMono';
+  src: url('../../static/wcoa/fonts/PtMono/PtMono-Regular-webfont.eot');
+  src: url('../../static/wcoa/fonts/PtMono/PtMono-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/PtMono/PtMono-Regular-webfont.woff') format('woff'), url('../../static/wcoa/fonts/PtMono/PtMono-Regular-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/PtMono/PtMono-Regular-webfont.svg#PtMono-Regular') format('svg');
+  font-weight: 400;
+  font-style: normal;
+}
+*,
+input {
+  font-family: "PtMono", "Courier New", Courier, monospace;
+  font-style: normal;
+  font-weight: normal;
+}
+p,
+p span {
+  font-family: OpenSans, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  word-wrap: break-word;
+}
+
+/*
+* GeoPortal Overrides
+*/
+body {
+  background-color: white;
+}
+
+/* HEADER - NAV */
+.g-header.navbar-inverse {
+  min-height: 100px;
+}
+
+/* SEARCH PANEL - SEARCHBAR ROW */
+.g-search-bar-row {
+  background: transparent;
+  box-shadow: none;
+}
+
+.g-search-bar-title {
+  display: none;
+}
+
+/* SEARCH PANEL - SEARCH INPUT OVERRIDES */
+.g-search-bar .search-box {
+  width: 29%;
+  padding: 0;
+}
+
+.g-search-bar .search-box .input-group {
+  border: 1px solid #ff3817;
+  border-radius: 3px;
+}
+
+.g-search-bar .search-box .input-group input {
+  width: calc(100% - 60px);
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: PtMono, "Courier New", Courier, monospace;
+}
+
+.g-search-bar .search-box .esri-icon-search {
+  margin: 0 5px 0 10px;
+  font-size: 14px;
+  color: #515151;
+  display: none;
+}
+
+.g-search-bar .search-box .btn {
+  padding: 0 5px;
+  background: transparent;
+  color: transparent;
+  background-image: url("https://catalog.westcoastoceans.org/assets/img/icons/black_search.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* SEARCH PANEL - CONTENT */
+.g-search-pane-right {
+  top: -60px;
+  position: relative;
+}
+
+/* SEARCH RESULTS PANE */
+.g-search-results-header {
+  height: 3rem;
+}
+
+.g-paging-count {
+  color: #0070cf;
+  font-weight: 400;
+  font-family: OpenSans,sans-serif;
+  font-size: 22px;
+}
+
+/* ITEM CARD */
+.g-item-card {
+  box-shadow: none;
+  border-top: dashed 1.111px rgb(166,166,166);
+}
+
+.g-item-card:last-child {
+  border-bottom: dashed 1px rgb(166,166,166);
+}
+
+.g-item-title {
+  font-size: 22px;
+  text-transform: uppercase;
+  line-height: 28px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
