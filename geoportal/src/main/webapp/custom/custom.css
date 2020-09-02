@@ -168,6 +168,10 @@ body {
   border-bottom: dashed 1px rgb(166,166,166);
 }
 
+.g-item-description.explode {
+  max-height: unset;
+}
+
 .g-item-title {
   font-size: 22px;
   text-transform: uppercase;
