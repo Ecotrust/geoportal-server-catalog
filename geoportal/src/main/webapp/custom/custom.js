@@ -2,12 +2,29 @@
   // Custom initialization
 })();
 
-var descriptionClickEvent = function() {
-  if ($(this).hasClass('explode')) {
-    $(this).removeClass('explode');
+var toggleDescriptionExplode = function(descriptionElement) {
+  if (descriptionElement.hasClass('explode')) {
+    descriptionElement.removeClass('explode');
   } else {
-    $(this).addClass('explode');
+    $('.g-item-description').removeClass('explode');
+    descriptionElement.addClass('explode');
   }
+}
+
+var titleClickEvent = function(){
+  var descriptionElement = $(this).parents('.g-item-title').siblings('.g-item-description');
+  toggleDescriptionExplode(descriptionElement);
+  // Prevent default link to open metadata in new tab
+  return false;
+}
+
+var updateTitleClickEvents = function() {
+  $('.g-item-title a').off("click");
+  $('.g-item-title a').on("click", titleClickEvent);
+}
+
+var descriptionClickEvent = function() {
+  toggleDescriptionExplode($(this));
 }
 
 var updateDescriptionClickEvents = function() {
@@ -17,6 +34,7 @@ var updateDescriptionClickEvents = function() {
 
 var oneSecondRepeater = function() {
   updateDescriptionClickEvents();
+  updateTitleClickEvents();
 
   setTimeout(oneSecondRepeater, 1000);
 }

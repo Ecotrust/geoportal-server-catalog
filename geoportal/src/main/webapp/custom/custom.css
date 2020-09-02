@@ -168,16 +168,30 @@ body {
   border-bottom: dashed 1px rgb(166,166,166);
 }
 
-.g-item-description.explode {
-  max-height: unset;
-}
-
 .g-item-title {
   font-size: 22px;
   text-transform: uppercase;
   line-height: 28px;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.g-item-title a {
+  color: #333;
+}
+
+.g-item-title a:hover,
+.g-item-title a:visited,
+.g-item-title a:focus {
+  text-decoration: none;
+}
+
+.g-item-description {
+  cursor: pointer;
+}
+
+.g-item-description.explode {
+  max-height: unset;
 }
 
 .g-item-actions > a[title^="Add to Map"] {
