@@ -93,8 +93,11 @@ body {
 
 /* SEARCH PANEL - SEARCHBAR ROW */
 .g-search-bar-row {
-  background: transparent;
   box-shadow: none;
+  /* click through logic by LawrenceKSRealEstate and TylerH @
+    https://stackoverflow.com/a/4839672/706797 */
+  background: none !important; /* for IE 11 support */
+  pointer-events: none;
 }
 
 .g-search-bar-title {
@@ -105,6 +108,7 @@ body {
 .g-search-bar .search-box {
   width: 29%;
   padding: 0;
+  pointer-events: all;
 }
 
 .g-search-bar .search-box .input-group {
@@ -130,6 +134,7 @@ body {
   padding: 0 5px;
   background: transparent;
   color: transparent;
+  border: none;
   background-image: url("https://catalog.westcoastoceans.org/assets/img/icons/black_search.png");
   background-repeat: no-repeat;
   background-position: center center;
@@ -169,4 +174,8 @@ body {
   line-height: 28px;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.g-item-actions > a[title^="Add to Map"] {
+  display: none;
 }
