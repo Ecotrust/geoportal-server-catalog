@@ -86,6 +86,10 @@ body {
   background-color: white;
 }
 
+.modal-dialog {
+  margin: 130px auto;
+}
+
 /* HEADER - NAV */
 .g-header.navbar-inverse {
   min-height: 100px;
@@ -141,9 +145,92 @@ body {
 }
 
 /* SEARCH PANEL - CONTENT */
+.g-search-pane-left {
+  background: none;
+}
+
+.g-search-content-row .g-drop-pane {
+  box-shadow: none;
+}
+
+.g-search-pane-left .dijitTitlePaneTitle {
+  background-color: #F4F2F1;
+  height: 70px;
+  color: #332e1f;
+  font-size: 22px;
+}
+.g-filter-collapse {
+  border-top: 1px solid #8FB6CC;
+  margin-bottom: 0;
+  background-color: #F4F2F1;
+}
+
+.g-search-pane-left .g-filter-collapse:nth-of-type(1),
+.g-search-pane-left .g-filter-collapse:nth-of-type(2) {
+  border-top: none;
+}
+
+.g-search-pane-left:hover div.dijitTitlePane div.dijitTitlePaneTitle {
+  background-color: rgba(244,242,241,0.5);
+  color: rgba(51,46,31,0.5);
+  border-top-color: rgba(143,182,204,0.5);
+}
+
+.g-search-pane-left div.dijitTitlePane:hover div.dijitTitlePaneTitle {
+  background-color: #F4F2F1;
+  color: #332e1f;
+}
+
+.dijitInline,
+.g-search-pane-left .dijitTitlePaneTextNode,
+.dijitTitlePaneTitleFocus {
+  height: 100%;
+  font-size: 22px;
+}
+
+.dijitTitlePaneTitleFocus:focus {
+  outline: none;
+}
+
+.dijitArrowNode {
+  line-height: 50px;
+}
+
+.g-drop-pane .g-drop-pane-arrow svg {
+  fill: #332e1f;
+}
+
+.g-search-pane-left:hover .g-drop-pane .g-drop-pane-arrow svg {
+  fill: rgba(51,46,31,0.5);
+}
+
+.g-drop-pane-tools {
+  padding-top: 17px;
+}
+
+.g-search-pane-left div.dijitTitlePane:hover div.dijitTitlePaneTitle .g-drop-pane-tools svg,
+.g-search-pane-left div.dijitTitlePane:hover div.dijitTitlePaneTitle .g-drop-pane-arrow svg {
+  fill: #332e1f;
+}
+
+.dijitTitlePaneContentOuter {
+  background-color: #F4F2F1;
+}
+
 .g-search-pane-right {
   top: -60px;
   position: relative;
+}
+
+/* APPLIED FILTERS */
+.g-applied-filter {
+  background-color: #F4F2F1;
+  border: 1px solid #CCC;
+  border-radius: 3px;
+}
+
+.g-applied-filter a:hover svg {
+  fill: #332e1f;
 }
 
 /* SEARCH RESULTS PANE */
