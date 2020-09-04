@@ -344,6 +344,10 @@ div.g-entry-links > div:hover > a {
   text-decoration: none;
 }
 
-div.g-entry-links > div:hover > a.iframed {
+div.g-entry-links > div.iframed:hover {
+  padding-top: 4px;
+}
+
+div.g-entry-links > div.iframed:hover > a {
   position: fixed;
 }
