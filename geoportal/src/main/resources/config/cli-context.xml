@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans 
+<beans:beans
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,8 +16,8 @@
 	<beans:bean id="geoportalContext" class="com.esri.geoportal.context.GeoportalContext">
 		<!-- <beans:property name="elasticContext" ref="elasticContext" /> -->
 
-		<beans:property name="supportsApprovalStatus" value="false" />
-		<beans:property name="defaultApprovalStatus" value="" /> <!-- optional - approved|reviewed|disapproved|incomplete|posted|draft -->
+		<beans:property name="supportsApprovalStatus" value="true" />
+		<beans:property name="defaultApprovalStatus" value="draft" /> <!-- optional - approved|reviewed|disapproved|incomplete|posted|draft -->
 		<beans:property name="supportsGroupBasedAccess" value="false" />
 		<beans:property name="defaultAccessLevel" value="" /> <!-- optional - public|private -->
 	</beans:bean>
@@ -25,5 +25,5 @@
 
 
 
-	 
+
 </beans:beans>
