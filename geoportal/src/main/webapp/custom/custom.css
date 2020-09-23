@@ -301,20 +301,58 @@ body {
   text-decoration: none;
 }
 
-.g-item-description {
-  cursor: pointer;
-  max-height: 40px;
-  transition: max-height 0.8s ease-out;
-}
-
-.g-item-description.explode {
-  max-height: 1000px;
-  transition: max-height 1.2s ease-in;
-}
-
-.g-item-actions > a[title^="Add to Map"] {
+.g-item-card-info-container {
   display: none;
 }
+
+.wcoa-card-wrapper .g-item-description {
+  max-height: 200px;
+  overflow: hidden;
+  display: inline-table;
+}
+
+.g-item-description,
+.wcoa-card-wrapper {
+  cursor: pointer;
+}
+
+.wcoa-card-wrapper {
+  max-height: 42px;
+  transition: max-height 0.8s ease-out;
+  border: 1px solid red;
+  overflow: hidden;
+}
+
+.wcoa-card-wrapper.explode {
+  max-height: 500px;
+  transition: max-height 1.2s ease-in;
+}
+.wcoa-card-wrapper.explode .g-item-description {
+  /* transition: max-height 1.2s ease-in; */
+  overflow: auto;
+}
+
+.card-details-wrapper {
+  display: flex;
+}
+
+.card-details-left-wrapper {
+  order: 0;
+  flex-grow: 2;
+  min-height: 100px;
+  border: 1px solid green;
+}
+
+.card-details-right-wrapper {
+  order: 1;
+  flex-grow: 3;
+  min-height: 100px;
+  border: 1px solid purple;
+}
+
+/* .g-item-actions > a[title^="Add to Map"] {
+  display: none;
+} */
 
 /* Accessibility Changes */
 a {
