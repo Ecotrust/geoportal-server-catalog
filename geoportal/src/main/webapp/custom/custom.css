@@ -306,9 +306,8 @@ body {
 }
 
 .wcoa-card-wrapper .g-item-description {
-  max-height: 200px;
+  max-height: 180px;
   overflow: hidden;
-  display: inline-table;
 }
 
 .g-item-description,
@@ -318,36 +317,78 @@ body {
 
 .wcoa-card-wrapper {
   max-height: 42px;
-  transition: max-height 0.8s ease-out;
-  border: 1px solid red;
+  transition: max-height 0.5s, background-color 0.5s;
   overflow: hidden;
 }
 
 .wcoa-card-wrapper.explode {
-  max-height: 500px;
-  transition: max-height 1.2s ease-in;
+  max-height: 700px;
+  background-color: rgba(0,112,207,.05);
+  transition: max-height 0.5s, background-color 0.5s;
 }
 .wcoa-card-wrapper.explode .g-item-description {
-  /* transition: max-height 1.2s ease-in; */
-  overflow: auto;
+  overflow-y: auto;
+  border-bottom: 1px solid #ccc;
 }
 
 .card-details-wrapper {
   display: flex;
+  max-height: 490px;
 }
 
 .card-details-left-wrapper {
   order: 0;
-  flex-grow: 2;
+  flex-grow: 0;
   min-height: 100px;
-  border: 1px solid green;
+  min-width: 210px;
 }
 
 .card-details-right-wrapper {
   order: 1;
   flex-grow: 3;
   min-height: 100px;
-  border: 1px solid purple;
+  min-width: 100px;
+}
+
+dl.card-details-list {
+  max-height: 380px;
+  overflow-y: auto;
+  overflow-wrap: break-word;
+  margin-bottom: 0;
+  font-size: 11px;
+  margin-left: 20px;
+  text-transform: uppercase;
+}
+
+.card-details-list dt {
+  color: #a6a6a6;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.card-details-list dd {
+  margin-left: 0;
+  line-height: 16px;
+  margin-bottom: 12px;
+}
+
+img.bbox-spinner {
+  width: 210px;
+  height: 210px;
+  padding: 65px;
+}
+
+img.bbox-image {
+  margin-left: 5px;
+}
+
+p.card-footer {
+  font-weight: 200;
+  font-size: 10px;
+  float: right;
+  padding-right: 20px;
+  color: #868686;
+
 }
 
 /* .g-item-actions > a[title^="Add to Map"] {
