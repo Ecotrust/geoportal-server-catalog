@@ -243,6 +243,7 @@ body {
 .g-search-pane-right {
   top: -60px;
   position: relative;
+  width: 70%;
 }
 
 .g-drop-pane .g-entries a {
@@ -429,4 +430,41 @@ div.g-entry-links > div.iframed:hover {
 
 div.g-entry-links > div.iframed:hover > a {
   position: fixed;
+}
+
+
+@media (max-width: 767px) {
+  body {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .g-search-bar,
+  .g-search-content-row {
+    width: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+@media (min-width: 768px) {
+  .g-search-bar,
+  .g-search-content-row {
+    width: 750px;
+  }
+  .g-app {
+    overflow-x: hidden;
+  }
+}
+@media (min-width: 1020px) {
+  .g-search-bar,
+  .g-search-content-row {
+    width: 970px;
+  }
+}
+@media (min-width: 1215px) {
+  .g-search-bar,
+  .g-search-content-row {
+    width: 1170px;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
