@@ -432,6 +432,12 @@ div.g-entry-links > div.iframed:hover > a {
   position: fixed;
 }
 
+body.iframed span.g-drop-pane-tools,
+body.iframed .g-item-actions > a[title^="Preview"],
+body.iframed .g-item-actions > a[title^="Add to Map"] {
+  display: none;
+}
+
 
 @media (max-width: 767px) {
   body {
