@@ -28,15 +28,39 @@ var populateCardDetails = function(descriptionElement) {
       } else {
         in_wkid = 4326;
       }
-      var date_published = data._source.src_lastupdate_dt;  // TODO: Format Date
-      var creator = data._source.contact_organizations_s[0];  // TODO: aggregate list (is it always a list?)
-      var publisher = data._source.contact_organizations_s[0]; // TODO: how is this different from creator? It's often the same, but not for this record:
+      // Modified Date
+      if (data._source.hasOwnProperty('src_lastupdate_dt')) {
+        var date_published = data._source.src_lastupdate_dt;  // TODO: Format Date
+      } else {
+        var date_published = '';
+      }
+      // Contact Creator/Publisher
+      if (data._source.hasOwnProperty('contact_organizations_s') && data._source.contact_organizations_s.length > 0 ) {
+        var creator = data._source.contact_organizations_s[0];  // TODO: aggregate list (is it always a list?)
+        var publisher = data._source.contact_organizations_s[0]; // TODO: how is this different from creator? It's often the same, but not for this record:
+      } else {
+        var creator = '';
+        var publisher = '';
+      }
       // Title: TIME-SERIES DATA FOR SELF-EMPLOYED ECONOMIC ACTIVITY DEPENDENT ON THE OCEAN AND GREAT LAKES ECONOMY FOR COUNTIES, STATES, AND THE NATION BETWEEN 2005 AND 2014
       // -- default 3rd item here: https://portal.westcoastoceans.org/catalog/
       // -- live home: https://data.noaa.gov/dataset/dataset/time-series-data-for-self-employed-economic-activity-dependent-on-the-ocean-and-great-lake-20141
-      var contact_person = data._source.contact_people_s[0]; // TODO: email isn't captured in contact info
-      var constraints = data._source.apiso_OtherConstraints_s[0]; // TODO: Aggregate these if more than 1?
-      // var constraints = data._source.apiso_ConditionApplyingToAccessAndUse_txt[0]; // TODO: is this better or different at all from OtherConstraints?
+
+      // Contact Person
+      if (data._source.hasOwnProperty('contact_people_s') && data._source.contact_people_s.length > 0 ) {
+        var contact_person = data._source.contact_people_s[0]; // TODO: email isn't captured in contact info
+      } else {
+        var contact_person = '';
+      }
+
+      // Constraints
+      if (data._source.hasOwnProperty('apiso_OtherConstraints_s') && data._source.apiso_OtherConstraints_s.length > 0 ) {
+        var constraints = data._source.apiso_OtherConstraints_s[0]; // TODO: Aggregate these if more than 1?
+      } else if (data._source.hasOwnProperty('apiso_ConditionApplyingToAccessAndUse_txt') && data._source.apiso_ConditionApplyingToAccessAndUse_txt.length > 0 ) {
+        var constraints = data._source.apiso_ConditionApplyingToAccessAndUse_txt[0]; // TODO: is this better or different at all from OtherConstraints?
+      } else {
+        var constraints = '';
+      }
       var harvest_date = data._source.sys_modified_dt; // TODO: Format Date
       // var harvest_date = data._source.sys_xmlmeta_obj.date; // TODO: Format Date
       var harvest_source = data._source.src_source_name_s;
