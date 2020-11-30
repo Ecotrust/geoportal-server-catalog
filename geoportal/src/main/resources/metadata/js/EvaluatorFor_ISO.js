@@ -76,6 +76,73 @@ G.evaluators.iso = {
     G.evalProps(task,item,root,"apiso_OtherConstraints_s","//gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:otherConstraints/*/text()");
     G.evalProps(task,item,root,"apiso_Classification_s","//gmd:resourceConstraints/gmd:MD_SecurityConstraints/gmd:classification/gmd:MD_ClassificationCode/@codeListValue");
     G.writeProp(item,"apiso_HasSecurityConstraints_b",G.hasNode(task,root,"//gmd:resourceConstraints"));
+    
+    /* hierarchical category */
+    
+    /*
+     * There are two distinct cases of the source of the hierarchical category 
+     * information: metadata or a legacy system (service). Hierarchical category
+     * is always a string with pipe (|) separated category names like: 
+     * "Category|Oceanic|Temperature". If other separator is desired, update
+     * replace delimiter declaration in hierarchy_tokenizer and 
+     * reverse_hierarchy_tokenizer within elastic-mappings.json and
+     * elastic-mappings-7.json, then recreate Elastic Search index.
+     * 
+     * If the source is metadata or, more acuratelly: a field from within metadata
+     * use G.evalProps to read that information and put into 'src_category_cat
+     * property (Eample 1)
+     * 
+     * If the source of the metadata is an UNC folder or WAF folder, it is possible
+     * to use folder structure as category (Example 2)
+     * 
+     * If the source is a legacy system, you may consider making an AJAX call to
+     * this system and receive mapping information then use it to update
+     * 'user_category_cat' property (Example 3). In this example a simple service 
+     * is listening on port 3000 and is awaiting for the HTTP GET request in the 
+     * form of the following pattern: http://localhost:3000/<fileId> where file 
+     * id is information extracted from the metadata itself. External service is 
+     * able to map file it into category and provide a JSON response as below:
+     * {
+     *  "category": <category>
+     * }
+     * 
+     * NOTE! While first example uses 'src_category_cat' the second one uses 
+     * 'user_category_cat'. This is not a mistake; prefixes like 'src_' and 
+     * 'user_' denotes if particular property should be replaced or preserved
+     * during record update (harvesting).
+     * 
+     * In order to 'user_category_cat' be used instead of 'src_category_cat'
+     * update code of the Hierachical Category facet in SearchPanel.html
+     */
+   
+// //Example 1
+//    G.evalProps(task,item,root,"src_category_cat","//gmd:MD_TopicCategoryCode");
+
+// //Example 2
+//    var json = task.suppliedJson;
+//    if (json && (json.src_source_type_s === "UNC" || json.src_source_type_s === "WAF") 
+//             && json.src_uri_s && json.src_source_uri_s && json.src_source_uri_s.startsWith(json.src_source_type_s)) {
+//      var src_root = json.src_source_uri_s.substr(json.src_source_type_s.length+1);
+//      var src_root_index = json.src_uri_s.indexOf(src_root);
+//      if (src_root_index >= 0) {
+//        var src_base = json.src_uri_s.substr(src_root_index + src_root.length);
+//        src_base = src_base.split("/").filter(function(p) { return p.length > 0; }).slice(0, -1);
+//        src_base.unshift(src_root);
+//        var category = src_base.join("|");
+//        item["src_category_cat"] = [ category ];
+//      }
+//    }
+
+// //Example 3
+//    try {
+//      var response = JSON.parse(G.httpGet("http://localhost:3000/"+item.fileid));
+//      if (response && response.category && response.category.length > 0) {
+//        item["user_category_cat"] = [ response.category ];
+//      }
+//    } catch(exception) {
+//      print(exception);
+//    }
+    
   },
 
   evalInspire: function(task) {
