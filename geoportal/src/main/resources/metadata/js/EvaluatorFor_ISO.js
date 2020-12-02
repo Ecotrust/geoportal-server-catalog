@@ -117,7 +117,9 @@ G.evaluators.iso = {
 
 // //Example 1
 //    G.evalProps(task,item,root,"src_category_cat","//gmd:MD_TopicCategoryCode");
-   G.evalProps(task,item,root,"usr_category_cat","//gmd:MD_TopicCategoryCode");
+    if (item.apiso_TopicCategory_s) {
+      G.evalProps(task,item,root,"user_category_cat","//gmd:MD_TopicCategoryCode");
+    }
 
 // //Example 2
 //    var json = task.suppliedJson;
