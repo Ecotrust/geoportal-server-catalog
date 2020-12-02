@@ -39,11 +39,11 @@ G.evaluators.iso = {
     G.evalProp(task,item,iden,"thumbnail_s","gmd:graphicOverview/gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString");
     G.evalProps(task,item,root,"contact_organizations_s","//gmd:CI_ResponsibleParty/gmd:organisationName/*/text()");
     G.evalProps(task,item,root,"contact_people_s","//gmd:CI_ResponsibleParty/gmd:individualName/*/text()");
-    
+
     /* links */
     //G.evalProps(task,item,root,"links_s","//gmd:CI_OnlineResource/gmd:linkage/gmd:URL");
-    //G.evalProps(task,item,root,"links_s","//gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL | //srv:connectPoint/gmd:CI_OnlineResource/gmd:linkage/gmd:URL"); 
-    G.evalProps(task,item,root,"links_s","//gmd:CI_OnlineResource/gmd:linkage/gmd:URL[not(ancestor::gmd:thesaurusName)]");    
+    //G.evalProps(task,item,root,"links_s","//gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL | //srv:connectPoint/gmd:CI_OnlineResource/gmd:linkage/gmd:URL");
+    G.evalProps(task,item,root,"links_s","//gmd:CI_OnlineResource/gmd:linkage/gmd:URL[not(ancestor::gmd:thesaurusName)]");
 
     /* identification */
     G.evalProp(task,item,root,"apiso_Identifier_s","gmd:fileIdentifier/*/text()");
@@ -76,51 +76,52 @@ G.evaluators.iso = {
     G.evalProps(task,item,root,"apiso_OtherConstraints_s","//gmd:resourceConstraints/gmd:MD_LegalConstraints/gmd:otherConstraints/*/text()");
     G.evalProps(task,item,root,"apiso_Classification_s","//gmd:resourceConstraints/gmd:MD_SecurityConstraints/gmd:classification/gmd:MD_ClassificationCode/@codeListValue");
     G.writeProp(item,"apiso_HasSecurityConstraints_b",G.hasNode(task,root,"//gmd:resourceConstraints"));
-    
+
     /* hierarchical category */
-    
+
     /*
-     * There are two distinct cases of the source of the hierarchical category 
+     * There are two distinct cases of the source of the hierarchical category
      * information: metadata or a legacy system (service). Hierarchical category
-     * is always a string with pipe (|) separated category names like: 
+     * is always a string with pipe (|) separated category names like:
      * "Category|Oceanic|Temperature". If other separator is desired, update
-     * replace delimiter declaration in hierarchy_tokenizer and 
+     * replace delimiter declaration in hierarchy_tokenizer and
      * reverse_hierarchy_tokenizer within elastic-mappings.json and
      * elastic-mappings-7.json, then recreate Elastic Search index.
-     * 
+     *
      * If the source is metadata or, more acuratelly: a field from within metadata
      * use G.evalProps to read that information and put into 'src_category_cat
      * property (Eample 1)
-     * 
+     *
      * If the source of the metadata is an UNC folder or WAF folder, it is possible
      * to use folder structure as category (Example 2)
-     * 
+     *
      * If the source is a legacy system, you may consider making an AJAX call to
      * this system and receive mapping information then use it to update
-     * 'user_category_cat' property (Example 3). In this example a simple service 
-     * is listening on port 3000 and is awaiting for the HTTP GET request in the 
-     * form of the following pattern: http://localhost:3000/<fileId> where file 
-     * id is information extracted from the metadata itself. External service is 
+     * 'user_category_cat' property (Example 3). In this example a simple service
+     * is listening on port 3000 and is awaiting for the HTTP GET request in the
+     * form of the following pattern: http://localhost:3000/<fileId> where file
+     * id is information extracted from the metadata itself. External service is
      * able to map file it into category and provide a JSON response as below:
      * {
      *  "category": <category>
      * }
-     * 
-     * NOTE! While first example uses 'src_category_cat' the second one uses 
-     * 'user_category_cat'. This is not a mistake; prefixes like 'src_' and 
+     *
+     * NOTE! While first example uses 'src_category_cat' the second one uses
+     * 'user_category_cat'. This is not a mistake; prefixes like 'src_' and
      * 'user_' denotes if particular property should be replaced or preserved
      * during record update (harvesting).
-     * 
+     *
      * In order to 'user_category_cat' be used instead of 'src_category_cat'
      * update code of the Hierachical Category facet in SearchPanel.html
      */
-   
+
 // //Example 1
 //    G.evalProps(task,item,root,"src_category_cat","//gmd:MD_TopicCategoryCode");
+   G.evalProps(task,item,root,"usr_category_cat","//gmd:MD_TopicCategoryCode");
 
 // //Example 2
 //    var json = task.suppliedJson;
-//    if (json && (json.src_source_type_s === "UNC" || json.src_source_type_s === "WAF") 
+//    if (json && (json.src_source_type_s === "UNC" || json.src_source_type_s === "WAF")
 //             && json.src_uri_s && json.src_source_uri_s && json.src_source_uri_s.startsWith(json.src_source_type_s)) {
 //      var src_root = json.src_source_uri_s.substr(json.src_source_type_s.length+1);
 //      var src_root_index = json.src_uri_s.indexOf(src_root);
@@ -142,7 +143,7 @@ G.evaluators.iso = {
 //    } catch(exception) {
 //      print(exception);
 //    }
-    
+
   },
 
   evalInspire: function(task) {
@@ -154,7 +155,7 @@ G.evaluators.iso = {
     G.evalCode (task,item,root,"apiso_ResponsiblePartyRole_txt","gmd:identificationInfo/gmd:MD_DataIdentification/gmd:pointOfContact/gmd:CI_ResponsibleParty/gmd:role/gmd:CI_RoleCode");
     G.evalProps(task,item,root,"apiso_SpecificationTitle_txt","//gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:title/*/text()");
     G.evalDates(task,item,root,"apiso_SpecificationDate_dt","//gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/date/gco:Date");
-    G.evalProps(task,item,root,"apiso_SpecificationDateType_txt","//gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode/@codeListValue");   
+    G.evalProps(task,item,root,"apiso_SpecificationDateType_txt","//gmd:dataQualityInfo/gmd:DQ_DataQuality/gmd:report/gmd:DQ_DomainConsistency/gmd:result/gmd:DQ_ConformanceResult/gmd:specification/gmd:CI_Citation/gmd:date/gmd:CI_Date/gmd:dateType/gmd:CI_DateTypeCode/@codeListValue");
   },
 
   evalOther: function(task) {
@@ -170,7 +171,7 @@ G.evaluators.iso = {
     G.evalProps(task,item,root,"apiso_grid_dimensions_num_i","//gmd:MD_GridSpatialRepresentation/gmd:numberOfDimensions/gco:Integer");
     G.evalProps(task,item,root,"apiso_grid_dimension_name_s","//gmd:MD_GridSpatialRepresentation/gmd:axisDimensionProperties/gmd:MD_Dimension/gco:Integer/gmd:dimensionName/gmd:MD_DimensionNameTypeCode");
     G.evalProps(task,item,root,"apiso_grid_dimension_size_i","//gmd:MD_GridSpatialRepresentation/gmd:axisDimensionProperties/gmd:MD_Dimension/gco:Integer/gmd:dimensionSize/gco:Integer");
-    G.evalProps(task,item,root,"apiso_grid_cell_geometry_s","//gmd:MD_GridSpatialRepresentation/gmd:cellGeometry/gmd:MD_CellGeometryCode/@codeListValue");    
+    G.evalProps(task,item,root,"apiso_grid_cell_geometry_s","//gmd:MD_GridSpatialRepresentation/gmd:cellGeometry/gmd:MD_CellGeometryCode/@codeListValue");
   },
 
   evalService: function(task) {
@@ -220,7 +221,7 @@ G.evaluators.iso = {
     G.evalProp(task,item,root,"apiso_Denominator_i","gmd:identificationInfo/gmd:MD_DataIdentification/gmd:spatialResolution/gmd:MD_Resolution/gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator/gco:Integer");
     G.evalProp(task,item,root,"apiso_DistanceValue_d","gmd:identificationInfo/gmd:MD_DataIdentification/gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance");
     G.evalProp(task,item,root,"apiso_DistanceUOM_s","gmd:identificationInfo/gmd:MD_DataIdentification/gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance/@uom");
-    
+
     if (task.parseGml) {
       var geojsons = {};
       G.forEachNode(task,root,"//gmd:EX_Extent/gmd:geographicElement/gmd:EX_BoundingPolygon",function(gmdPolygonNode) {
@@ -232,7 +233,7 @@ G.evaluators.iso = {
           geojsons[geojson.type].push(geojson);
         }
       });
-      
+
       Object.keys(geojsons).forEach(function(key, kidx){
         if (kidx==0) {
           geojsons[key].forEach(function(g, idx) {
@@ -242,7 +243,7 @@ G.evaluators.iso = {
           });
         }
       });
-      
+
       if (!hasEnvelope && task.bbox) {
         var result = G.makeEnvelope(task.bbox[0][0],task.bbox[0][1],task.bbox[1][0],task.bbox[1][1]);
         java.lang.System.out.println(JSON.stringify(result));
@@ -267,7 +268,7 @@ G.evaluators.iso = {
             date: G.getString(task,node,"gml:TimeInstant/gml:timePosition"),
             indeterminate: G.getString(task,node,"gml:TimeInstant/gml:timePosition/@indeterminatePosition")
           }
-        };       
+        };
       } else if (G.hasNode(task,node,"gml:TimePeriod/gml:beginPosition")) {
         params = {
           begin: {
@@ -277,8 +278,8 @@ G.evaluators.iso = {
           end: {
             date: G.getString(task,node,"gml:TimePeriod/gml:endPosition"),
             indeterminate: G.getString(task,node,"gml:TimePeriod/gml:endPosition/@indeterminatePosition")
-          } 
-        };       
+          }
+        };
       } else if (G.hasNode(task,node,"gml:TimePeriod/gml:begin")) {
         params = {
           begin: {
@@ -288,16 +289,16 @@ G.evaluators.iso = {
           end: {
             date: G.getString(task,node,"gml:TimePeriod/gml:end/gml:TimeInstant/gml:timePosition"),
             indeterminate: G.getString(task,node,"gml:TimePeriod/gml:end/gml:TimeInstant/gml:timePosition/@indeterminatePosition")
-          } 
+          }
         };
 
-      } else if (G.hasNode(task,node,"gml32:TimeInstant/gml32:timePosition")) {  
+      } else if (G.hasNode(task,node,"gml32:TimeInstant/gml32:timePosition")) {
         params = {
           instant: {
             date: G.getString(task,node,"gml32:TimeInstant/gml32:timePosition"),
             indeterminate: G.getString(task,node,"gml32:TimeInstant/gml32:timePosition/@indeterminatePosition")
           }
-        };       
+        };
       } else if (G.hasNode(task,node,"gml32:TimePeriod/gml32:beginPosition")) {
         params = {
           begin: {
@@ -307,8 +308,8 @@ G.evaluators.iso = {
           end: {
             date: G.getString(task,node,"gml32:TimePeriod/gml32:endPosition"),
             indeterminate: G.getString(task,node,"gml32:TimePeriod/gml32:endPosition/@indeterminatePosition")
-          } 
-        };      
+          }
+        };
       } else if (G.hasNode(task,node,"gml32:TimePeriod/gml32:begin")) {
         params = {
           begin: {
@@ -318,14 +319,14 @@ G.evaluators.iso = {
           end: {
             date: G.getString(task,node,"gml32:TimePeriod/gml32:end/gml32:TimeInstant/gml32:timePosition"),
             indeterminate: G.getString(task,node,"gml32:TimePeriod/gml32:end/gml32:TimeInstant/gml32:timePosition/@indeterminatePosition")
-          } 
+          }
         };
       }
 
       if (params) G.analyzeTimePeriod(task,params);
-    }); 
+    });
   },
-  
+
   evalLinks: function(task) {
     var item = task.item, root = task.root;
     G.evalProp(task,item,root,"url_thumbnail_s","gmd:identificationInfo/gmd:MD_DataIdentification/gmd:graphicOverview/gmd:MD_BrowseGraphic/gmd:fileName/gco:CharacterString");

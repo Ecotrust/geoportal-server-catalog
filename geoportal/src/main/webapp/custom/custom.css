@@ -438,6 +438,58 @@ body.iframed .g-item-actions > a[title^="Add to Map"] {
   display: none;
 }
 
+/* Hierarchical Categories */
+div.g-entry-links > div.dijitTree {
+  height: auto;
+}
+
+div.g-entry-links > div.dijitTree:hover {
+  margin-left: -7px;
+}
+
+div.g-entry-links:focus,
+div.dijitTree:focus,
+div.dijitTreeContainer:focus,
+div.dijitTreeNodeContainer:focus,
+div.dijitTreeNode:focus {
+  outline: none;
+}
+
+.calcite div.dijitTreeRow,
+.calcite div.dijitTreeRow:hover {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+span.dijitTreeLabel {
+  border: none;
+  outline: none;
+}
+
+.calcite span.dijitInline.dijitTreeExpando {
+  color: black;
+  font-size: 14px;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  padding: 0.2rem 1.4rem 1.4rem 0.1rem;
+}
+
+.calcite span.dijitInline.dijitTreeExpando:hover {
+  font-weight: bold;
+  border: 2px solid black;
+}
+
+.calcite div.dijitTreeRow span.dijitTreeContent {
+  margin-left: 2rem;
+}
+
+.calcite div.dijitTreeRow span.dijitTreeContent span.dijitTreeLabel {
+  margin-left: -2rem;
+}
+
+.calcite div.dijitTreeRow span.dijitTreeContent:hover span.dijitTreeLabel {
+  font-weight: bold;
+  text-decoration: underline;
+}
 
 @media (max-width: 767px) {
   body {
