@@ -139,7 +139,7 @@ body {
   background: transparent;
   color: transparent;
   border: none;
-  background-image: url("https://catalog.westcoastoceans.org/assets/img/icons/black_search.png");
+  background-image: url("/static/wcoa/img/icons/black_search.png");
   background-repeat: no-repeat;
   background-position: center center;
 }
