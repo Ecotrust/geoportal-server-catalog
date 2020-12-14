@@ -149,6 +149,10 @@ body {
   background: none;
 }
 
+.g-search-pane-left .dijitTitlePaneContentInner {
+  display: grid;
+}
+
 .g-search-content-row .g-drop-pane {
   box-shadow: none;
   background-color: #F4F2F1;
