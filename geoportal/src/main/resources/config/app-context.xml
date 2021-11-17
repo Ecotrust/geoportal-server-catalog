@@ -21,6 +21,7 @@
 		<beans:property name="supportsGroupBasedAccess" value="false" />
 		<beans:property name="defaultAccessLevel" value="" /> <!-- optional - public|private -->
 		<beans:property name="parseGml" value="false" />
+		<beans:property name="supportsCollections" value="false" />
 	</beans:bean>
 <!-- the tokens like ${es_cluster:elasticsearch} ${gpt_indexName:metadata}
 represent environment variables that can be used to pass values into a spring configuration context, aka these files
@@ -39,7 +40,8 @@ see: docs/configureByEnvironmentVariable.md
 		<beans:property name="mappingsFile7" value="${gpt_mappingsFile:config/elastic-mappings-7.json}" />
 		<beans:property name="httpPort" value="9200" />
 		<beans:property name="transportPort" value="9300" />
-
+		<beans:property name="proxyBufferSize" value="8192" />
+		
 		<!-- complete the following if you have x-pack security enabled,
 		     see https://www.elastic.co/guide/en/x-pack/current/java-clients.html -->
 		<!--

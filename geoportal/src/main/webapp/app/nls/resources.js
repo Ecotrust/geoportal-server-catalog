@@ -28,6 +28,7 @@ define({
       updating: "Updating...",
       uploading: "Uploading...",
       working: "...",
+      incompatible: "Your Internet browser is no longer supported.<br>Please, use different browser."
     },
 
     nav: {
@@ -56,6 +57,7 @@ define({
       label: "Sign In",
       username: "Username",
       password: "Password",
+      keep: "Keep me signed in:",
       incomplete: "A Username and Password are required.",
       invalidCredentials: "Invalid credentials."
     },
@@ -78,7 +80,8 @@ define({
         accessGroups: "Access Groups",
         missingSource: "Editor/Upload",
         createFilter: "Create Filter",
-        hierarchicalCategory: "Hierarchical Category"
+        hierarchicalCategory: "Hierarchical Category",
+        collections: "Collections"
       },
       componentSettings: {
         componentLabel: "Label",
@@ -254,7 +257,8 @@ define({
         csv:  "CSV result",
         csw:  "CSW result",
         kml:  "KML result",
-        dcat: "DCAT result"
+        dcat: "DCAT result",
+        stac: "STAC result"
       }
     },
 
@@ -285,6 +289,12 @@ define({
       statusChecker: {
         unknown: "Unknown",
         status: "Service availability = ${score}%"
+      },
+      tooltips: {
+        owner: "Owner",
+        date: "Metadata date",
+        permission: "Permission",
+        keywords: "Keywords"
       }
     },
 
@@ -328,6 +338,10 @@ define({
         incomplete: "Incomplete",
         posted: "Posted",
         draft: "Draft"
+      },
+      setCollections: {
+        caption: "Set Collections",
+        collections: "Collections"
       },
       setField: {
         caption: "Set Field",

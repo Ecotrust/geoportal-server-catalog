@@ -82,6 +82,13 @@ body {
   display: none;
 }
 
+.g-browser-incompatible {
+  margin: auto;
+  display: none;
+  width: 450px;
+  text-align: center;
+}
+
 .g-app-loading {
   position: absolute;
   top: 0;
@@ -90,6 +97,7 @@ body {
   right: 0;
   z-index: 99;
   background-color: #f8f8f8;
+  display: none;
 }
 .g-app-loading .progress {
   width: 200px;
@@ -332,6 +340,11 @@ body {
 .g-search-pane-left {
   width: 30%;
   margin-right: 16px;
+  
+  position: sticky;
+  top: 0px;
+  align-self: flex-start;
+  
 }
 
 .g-search-pane-right {
@@ -493,6 +506,14 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.g-entry-selected {
+  font-weight: bold;
+}
+
+.g-entry-selected a::before {
+  content: '\21D2   ';
 }
 
 .g-spatial-filter-map {
@@ -781,6 +802,19 @@ g-item-card-content-info .g-item-card .g-item-title {
   height: auto;
 }
 
+.g-item-card .g-item-footprintNode {
+  width: 300px;
+  height: 300px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.g-item-card .g-item-footprintMap {
+  width: 300px !important;
+  height:300px !important;
+  margin: 0px;
+  padding: 0px;
+}
 /* Style for descriptions creates a cap of a few lines of text  */
 .g-item-card .g-item-description {
   max-height: 40px;
@@ -843,6 +877,7 @@ g-item-card-content-info .g-item-card .g-item-title {
 .g-labels-right .form-group input {
   margin-bottom: 10px;
 }
+
 .g-labels-right .control-label {
   text-align: right;
   color: #6e6e6e;
@@ -1153,3 +1188,29 @@ a.dropdown-toggle:focus {
   height: 16px;
   width: 16px;
 }
+
+.g-item-html {
+  min-height: 200px; 
+  max-height: 600px; 
+  width: 100%; 
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.g-item-html-body {
+  height: 100%;
+}
+
+.g-item-html-body iframe {
+  border-color: lightgrey;
+  border-style: solid;
+  border-width: thin;
+}
+.g-keepSignedInCheck {
+  position: relative;
+  top: 2px;
+  left: 2px;
+}
+
