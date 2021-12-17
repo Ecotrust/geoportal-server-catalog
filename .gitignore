@@ -143,6 +143,8 @@ geoportal/nb-configuration.xml
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
+.vscode/settings.json
+geoportal/.factorypath
 
 ### WCOA Settings
 geoportal/src/main/resources/config/app-security.xml

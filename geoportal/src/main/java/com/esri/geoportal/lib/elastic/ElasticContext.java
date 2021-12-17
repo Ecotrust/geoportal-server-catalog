@@ -36,7 +36,9 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.settings.Settings.Builder;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+// import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
 
@@ -47,6 +49,7 @@ import org.slf4j.LoggerFactory;
  * Elasticsearch context.
  */
 public class ElasticContext {
+  private static final int DEFAULT_PROXY_BUFFER_SIZE = 4096;
 
   /** Logger. */
   private static final Logger LOGGER = LoggerFactory.getLogger(ElasticContext.class);
@@ -82,8 +85,26 @@ public class ElasticContext {
   private String xpackSslCertificate = null;
   private String xpackSslCertificateAuthorities = null;
   
+  private Integer proxyBufferSize = DEFAULT_PROXY_BUFFER_SIZE;
+  
   /** Constructor */
   public ElasticContext() {}
+  
+  /**
+   * Gest proxy buffer size.
+   * @return buffer size
+   */
+  public Integer getProxyBufferSize() {
+    return proxyBufferSize;
+  }
+
+  /**
+   * Sets proxy buffer size.
+   * @param proxyBufferSize buffer size or <code>null</code> for default
+   */
+  public void setProxyBufferSize(Integer proxyBufferSize) {
+    this.proxyBufferSize = proxyBufferSize!=null? proxyBufferSize: DEFAULT_PROXY_BUFFER_SIZE;
+  }
   
   /** Allow internal metadata file idenitfiers to be used as the Elasticsearch _id .*/
   public boolean getAllowFileId() {
@@ -358,7 +379,7 @@ public class ElasticContext {
     JsonObject jso = (JsonObject)JsonUtil.readResourceFile(path);
     String json = JsonUtil.toJson(jso,false);
     AdminClient client = this.getTransportClient().admin();
-    client.indices().prepareCreate(name).setSource(json).get();
+    client.indices().prepareCreate(name).setSource(json, XContentType.JSON).get();
   }
   
   /**
@@ -553,7 +574,8 @@ public class ElasticContext {
       for (String node: nodeNames) {
         try {
           InetAddress a = InetAddress.getByName(node);
-          transportClient.addTransportAddress(new InetSocketTransportAddress(a,transportPort));
+          // transportClient.addTransportAddress(new InetSocketTransportAddress(a,transportPort));
+          transportClient.addTransportAddress(new TransportAddress(a,transportPort));
         } catch (UnknownHostException ex) {
           LOGGER.warn(String.format("Invalid node name: %s", node), ex);
         }

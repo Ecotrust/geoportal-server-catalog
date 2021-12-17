@@ -11,11 +11,12 @@ This repository contains the capability of **Geoportal Server Catalog**, while i
 (Note: The long-lived Esri Geoportal Server v1 is now retired; its archive is [available here](https://github.com/Esri/geoportal-server).)
 
 ## Releases and Downloads
+- 2.6.5 - released December 17, 2021, [click here](https://github.com/Esri/geoportal-server-catalog/wiki) for release notes and downloads. Note that this version includes resolution to the Log4j2 vulnerability identified in December 2021.
 - 2.6.4 - released July 8, 2020, [click here](https://github.com/Esri/geoportal-server-catalog/wiki) for release notes and downloads.
 - 2.6.3 - released April 7, 2020, [click here](https://github.com/Esri/geoportal-server-catalog/wiki) for release notes and downloads.
 
 ## Can't Wait to Get Started?
-- Try the [sandbox site](http://geoss.esri.com/geoportal2) and learn what Geoportal 2 is all about!
+- Try the [sandbox site](http://gptogc.esri.com/geoportal2) and learn what Geoportal 2 is all about!
 - A different configuration that contains several 100,000 images as its [catalog](https://geoss.esri.com/imagecatalog)
 
 ## Features
@@ -29,7 +30,7 @@ This repository contains the capability of **Geoportal Server Catalog**, while i
 
 ## Requirements
 
-* Elasticsearch 6.0 or higher
+* Elasticsearch 7.0 or higher
 * Tomcat 9.x
 
 ## Installation
