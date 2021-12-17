@@ -442,6 +442,19 @@ body.iframed .g-item-actions > a[title^="Add to Map"] {
   display: none;
 }
 
+/* Layer Info Popups */
+
+div.g-item-html.dijitDialog,
+div.dijitDialogUnderlay,
+div.dijitDialogUnderlayWapper {
+  display: none !important;
+}
+
+img.bbox-spinner {
+  border: 0 transparent none !important ;
+}
+
+
 /* Hierarchical Categories */
 div.g-entry-links > div.dijitTree {
   height: auto;

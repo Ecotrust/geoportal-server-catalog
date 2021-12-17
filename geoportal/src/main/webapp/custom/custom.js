@@ -3,13 +3,13 @@
 })();
 
 var populateCardDetails = function(descriptionElement) {
-  var record_url = descriptionElement.parent().parent().children('.g-item-title').children('a').prop('href').split('/html')[0];
-  var record_id = record_url.split('/')[record_url.split('/').length-1];
+  var record_id = descriptionElement.parent().parent().parent().parent().children('.g-item-identification').attr('esid');
+  var record_url = './rest/metadata/item/' + record_id;
   var wrapper = descriptionElement.parent();
   var detailsWrapper = "\
     <div class='card-details-wrapper id='details-wrapper-" + record_id + "'>\
       <div class='card-details-left-wrapper' id='left-details-wrapper-" + record_id + "'>\
-        <img src='/static/wagtailadmin/images/spinner.gif' class='bbox-spinner' id='bbox-left-image-" + record_id + "'/>\
+        <img src='/geoportal/images/loading.gif' class='bbox-spinner' id='bbox-left-image-" + record_id + "'/>\
       </div>\
       <div class='card-details-right-wrapper' id='right-details-wrapper-" + record_id + ">\
       </div>\
