@@ -393,9 +393,29 @@ var updateDescriptionClickEvents = function() {
   $('.g-item-description').on("click", descriptionClickEvent);
 }
 
+var fitFacetTitles = function() {
+  var facetTitles = $('.g-search-pane-left .dijitTitlePaneTitleFocus');
+  facetTitles.each(function(i) {
+    fTitle = $(this);
+
+    while (fTitle.prop('scrollHeight') > fTitle.height() ) {
+      //this element is overflowing on the y axis
+      var node = fTitle.children('.dijitTitlePaneTextNode');
+      var font_size = parseInt(node.css("font-size"));
+      font_size -= 1;
+      node.css("font-size", font_size);
+    }
+  });
+}
+
+var elementResizer = function() {
+  fitFacetTitles();
+}
+
 var oneSecondRepeater = function() {
   updateDescriptionClickEvents();
   updateTitleClickEvents();
+  elementResizer();
 
   setTimeout(oneSecondRepeater, 1000);
 }

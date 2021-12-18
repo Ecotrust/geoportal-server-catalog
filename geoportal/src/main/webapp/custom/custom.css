@@ -244,6 +244,10 @@ body {
   background-color: #F4F2F1;
 }
 
+.g-search-pane-left .dijitTitlePaneTextNode, .dijitTitlePaneTitleFocus {
+  overflow: auto;
+}
+
 .g-search-pane-right {
   top: -60px;
   position: relative;
