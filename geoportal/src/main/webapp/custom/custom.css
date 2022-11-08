@@ -65,9 +65,21 @@
   font-weight: 400;
   font-style: normal;
 }
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../../static/wcoa/fonts/Rajdhani/Rajdhani-Regular.ttf');
+}
+@font-face {
+  font-family: 'Rajdhani Bold';
+  src: url('../../static/wcoa/fonts/Rajdhani/Rajdhani-Bold.ttf');
+}
+@font-face {
+  font-family: 'Rajdhani SemiBold';
+  src: url('../../static/wcoa/fonts/Rajdhani/Rajdhani-SemiBold.ttf');
+}
 *,
 input {
-  font-family: "PtMono", "Courier New", Courier, monospace;
+  font-family: "Rajdhani", "Open Sans", sans-serif;
   font-style: normal;
   font-weight: normal;
 }
@@ -124,7 +136,7 @@ body {
   width: calc(100% - 60px);
   padding: 8px 10px;
   font-size: 14px;
-  font-family: PtMono, "Courier New", Courier, monospace;
+  font-family: "Rajdhani" "Open Sans", sans-serif;
 }
 
 .g-search-bar .search-box .esri-icon-search {
