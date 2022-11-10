@@ -1,6 +1,11 @@
+// Globals
+var visualize_ids = ['122a031aeff34e72b10adf58b621e5db',];
+var visualize_id_map = {'122a031aeff34e72b10adf58b621e5db': 711,};
+
 (function() {
   // Custom initialization
 })();
+
 
 var populateCardDetails = function(descriptionElement) {
   var record_id = descriptionElement.parent().parent().parent().parent().children('.g-item-identification').attr('esid');
@@ -408,6 +413,25 @@ var fitFacetTitles = function() {
   });
 }
 
+var updateVisualizeTags = function() {
+  $('.g-item-identification').each(function(index, element) {
+    var gpid = $(element).attr('esid');
+    if (visualize_ids.indexOf(gpid) >= 0) {
+      var actions_element = $(element).parent().children('.g-item-actions')[0];
+      if ($(actions_element).children('.visualize_tag').length == 0) {
+        var mp_id = visualize_id_map[gpid];
+        // Hardcode x,y,z, and other defaults for now....
+        var visualize_link = "/visualize/#x=-124.50&y=40.50&z=5&logo=true&controls=true&dls[]=true&dls[]=0.5&dls[]=" + mp_id + "&basemap=ocean&tab=active&legends=false&layers=true";
+        var visualize_link_id = 'visualize_tag_' + gpid;
+        var visualize_element = '<a target="_blank" href="' + visualize_link + '" class="visualize_tag" id="' + visualize_link_id + '">Visualize</a>';
+        $(actions_element).append(visualize_element);
+      }
+
+
+    }
+  })
+}
+
 var elementResizer = function() {
   fitFacetTitles();
 }
@@ -415,12 +439,15 @@ var elementResizer = function() {
 var oneSecondRepeater = function() {
   updateDescriptionClickEvents();
   updateTitleClickEvents();
+  updateVisualizeTags();
   elementResizer();
 
   setTimeout(oneSecondRepeater, 1000);
 }
 
 onCatalogLoad = function() {
+  // let visualize_ids = ['122a031aeff34e72b10adf58b621e5db',];
+  // TODO: Get list of appropriate IDs from server and update 'visualize_ids' global
   oneSecondRepeater();
 }
 
