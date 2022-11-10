@@ -1,6 +1,6 @@
 // Globals
-var visualize_ids = ['122a031aeff34e72b10adf58b621e5db',];
-var visualize_id_map = {'122a031aeff34e72b10adf58b621e5db': 711,};
+var visualize_ids = [];
+var visualize_id_map = {};
 
 (function() {
   // Custom initialization
@@ -436,6 +436,17 @@ var elementResizer = function() {
   fitFacetTitles();
 }
 
+var loadCatalogPortalMap = function() {
+  var url = '/data_manager/get_portal_catalog_map';
+  $.ajax({
+    url: url,
+    success: function(data) {
+      visualize_id_map = data;
+      visualize_ids = Object.keys(data);
+    }
+  });
+}
+
 var oneSecondRepeater = function() {
   updateDescriptionClickEvents();
   updateTitleClickEvents();
@@ -446,8 +457,7 @@ var oneSecondRepeater = function() {
 }
 
 onCatalogLoad = function() {
-  // let visualize_ids = ['122a031aeff34e72b10adf58b621e5db',];
-  // TODO: Get list of appropriate IDs from server and update 'visualize_ids' global
+  loadCatalogPortalMap();
   oneSecondRepeater();
 }
 
