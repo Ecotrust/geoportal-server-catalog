@@ -27,11 +27,8 @@ define([],function(){var obj={
 
   searchMap: {
     basemap: "streets",
-<<<<<<< HEAD
     basemapUrl: "",
     isTiled: false,
-=======
->>>>>>> origin/wcoa
     autoResize: true,
     wrapAround180: true,
     center: [-98, 40],
