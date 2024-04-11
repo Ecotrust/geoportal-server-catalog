@@ -47,13 +47,13 @@ define(["dojo/_base/declare",
   "app/preview/PreviewUtil",
   "app/preview/PreviewPane",
   "app/search/ItemHtml"
-], 
+],
 function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domClass, domConstruct,
   _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Tooltip, TooltipDialog, popup,
   template, i18n, AppClient, ServiceType, util, ConfirmationDialog, ChangeOwner, DeleteItems,
-  MetadataEditor, gxeConfig, SetAccess, SetApprovalStatus, SetCollections, SetField, UploadMetadata, 
+  MetadataEditor, gxeConfig, SetAccess, SetApprovalStatus, SetCollections, SetField, UploadMetadata,
   PreviewUtil, PreviewPane, ItemHtml) {
-  
+
   var oThisClass = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
     i18n: i18n,
@@ -107,7 +107,7 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
       this._renderThumbnail(item);
 
       this._renderFootprint(item);
-      
+
       this._renderItemLinks(hit._id,item);
       this._renderLinksDropdown(item,links);
       this._renderOptionsDropdown(hit._id,item);
@@ -324,7 +324,7 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
         }
       }
     },
-    
+
     _renderDataHtml: function(item, uri) {
       console.log(item);
       var itemHtml = new ItemHtml({
@@ -337,7 +337,7 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
       });
       itemHtml.show();
     },
-    
+
     _renderLinksDropdown: function(item,links) {
       if (links.length === 0) return;
       var dd = domConstruct.create("div",{
@@ -550,7 +550,7 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
       var permissions = ""
       var keywordsArray = item.keywords_s;
       var keywords = null;
-      
+
       var MAX_KEYWORDS_LENGTH = 50;
       if (keywordsArray && Array.isArray(keywordsArray)) {
         for (var i=0; i<keywordsArray.length; i++) {
@@ -565,12 +565,12 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
           }
         }
       }
-      
+
       if (typeof date === "string" && date.length > 0) {
         var idx = date.indexOf("T");
         if (idx > 0) date =date.substring(0,idx);
       }
-      
+
       if (AppContext.appUser.isAdmin() || this._isOwner(item)) {
         if (AppContext.geoportal.supportsGroupBasedAccess) {
           v = item.sys_access_s;
@@ -612,7 +612,7 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
       } else {
         domStyle.set(this.permissionSection, "display", "none")
       }
-      
+
       if (keywords && keywords.length > 0) {
         util.setNodeText(this.keywordsNode, keywords);
       } else {
@@ -649,9 +649,9 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
           var south = item.envelope_geo[0].coordinates[0][1];
           var east = item.envelope_geo[0].coordinates[1][0];
           var north = item.envelope_geo[0].coordinates[1][1];
-          extent = new Extent({xmin:west, ymin:south, xmax:east, ymax:north, spatialReference:{wkid:4326}}); 
+          extent = new Extent({xmin:west, ymin:south, xmax:east, ymax:north, spatialReference:{wkid:4326}});
         };
-  
+
         if (item.shape_geo) {
 
           for (var i=0; i<item.shape_geo.coordinates[0].length; i++) {
@@ -663,7 +663,7 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
           }
           extent = new Extent({xmin:west-0.25, ymin:south-0.5, xmax:east+0.5, ymax:north+0.25, spatialReference:{wkid:4326}});
         }
-        
+
         var mapOptions = {
           basemap: "topo",  //For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
           //center: [item.envelope_cen_pt.lon, item.envelope_cen_pt.lat],
@@ -688,22 +688,22 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
         var gl = new GraphicsLayer({ id: "footprint" });
         map.addLayer(gl);
         var footprint = {
-          "geometry":{"rings": item.shape_geo.coordinates}, 
-          "spatialReference":{"wkid":4326}, 
+          "geometry":{"rings": item.shape_geo.coordinates},
+          "spatialReference":{"wkid":4326},
           "symbol":{
             "color":[0,0,0,64],
             "outline":{
-              "color":[0,0,0,255], 
+              "color":[0,0,0,255],
               "width":1,
               "type":"esriSLS",
               "style":"esriSLSSolid"
-            }, 
+            },
             "type":"esriSFS","style":"esriSFSSolid"
           }
         };
         var graphic = new Graphic(footprint);
         gl.add(graphic);
-        
+
         map.setExtent(extent, true);
 
       } else {
@@ -867,18 +867,24 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
     _renderTitleLink: function(itemId,item) {
       var v = item.sys_metadatatype_s;
       if (typeof v === "string" && v === "json") {
+        // TODO: How do we override the displayed title if user_wcodptitle_s is set?
         util.setNodeText(this.titleNode,item.title);
       } else {
         var titleNode = this.titleNode;
+        if (item.hasOwnProperty('user_wcodptitle_s') && item.user_wcodptitle_s && item.user_wcodptitle_s.length > 0) {
+          var innerHtml = item.user_wcodptitle_s;
+        } else {
+          var innerHtml = item.title
+        }
         var htmlNode = domConstruct.create("a",{
           href: "javascript:void(0)",
           title: item.title,
           "aria-label": item.title,
-          innerHTML: item.title
+          innerHTML: innerHtml
         },titleNode);
         this.own(on(htmlNode, "click", lang.hitch({self: this, item: item}, function(evt){
           var uri = "./rest/metadata/item/"+encodeURIComponent(itemId) + "/html";
-          if (AppContext.geoportal.supportsApprovalStatus || 
+          if (AppContext.geoportal.supportsApprovalStatus ||
               AppContext.geoportal.supportsGroupBasedAccess) {
             var client = new AppClient();
             uri = client.appendAccessToken(uri);
@@ -886,6 +892,7 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
           this.self._renderDataHtml(item, uri);
         })));
       }
+
     }
   });
 

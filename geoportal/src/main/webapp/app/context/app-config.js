@@ -7,8 +7,8 @@ define([],function(){var obj={
 
   edit: {
     setField: {
-      allow: false,
-      adminOnly: false
+      allow: true,
+      adminOnly: true
     }
   },
 
@@ -27,8 +27,11 @@ define([],function(){var obj={
 
   searchMap: {
     basemap: "streets",
+<<<<<<< HEAD
     basemapUrl: "",
     isTiled: false,
+=======
+>>>>>>> origin/wcoa
     autoResize: true,
     wrapAround180: true,
     center: [-98, 40],
