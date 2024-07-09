@@ -19,6 +19,7 @@ import com.esri.geoportal.context.GeoportalContext;
 import com.esri.geoportal.lib.elastic.ElasticContext;
 import com.esri.geoportal.lib.elastic.http.ElasticClient;
 import com.esri.geoportal.lib.elastic.http.util.AccessUtil;
+import com.esri.geoportal.lib.elastic.request.BulkEditRequest;
 
 import java.io.FileNotFoundException;
 import javax.json.Json;
@@ -28,7 +29,7 @@ import javax.json.JsonObjectBuilder;
 /**
  * Get an item.
  */
-public class DeleteItemRequest extends com.esri.geoportal.lib.elastic.request.DeleteItemRequest {
+public class DeleteItemRequest extends BulkEditRequest {
   
   /** Instance variables. */
   private String id;

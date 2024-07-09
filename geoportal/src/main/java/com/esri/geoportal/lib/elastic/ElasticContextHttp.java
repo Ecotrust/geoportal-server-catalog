@@ -59,7 +59,7 @@ public class ElasticContextHttp extends ElasticContext {
    */
   protected void _createAlias(String index, String alias) throws Exception {
     //LOGGER.info("Creating alias: "+alias+" for index: "+index);
-    ElasticClient client = new ElasticClient(getBaseUrl(false),getBasicCredentials());
+    ElasticClient client = new ElasticClient(getBaseUrl(false),getBasicCredentials(),getUseHttps());
     String url = client.getBaseUrl()+"/_aliases";
     JsonObjectBuilder request = Json.createObjectBuilder();
     JsonArrayBuilder actions = Json.createArrayBuilder();
@@ -82,7 +82,7 @@ public class ElasticContextHttp extends ElasticContext {
    */
   protected void _createIndex(String name) throws Exception {
     //LOGGER.info("Creating index: "+name);
-    ElasticClient client = new ElasticClient(getBaseUrl(false),getBasicCredentials());
+    ElasticClient client = new ElasticClient(getBaseUrl(false),getBasicCredentials(),getUseHttps());
     String url = client.getIndexUrl(name);
     String path = this.getActualMappingsFile();
     JsonObject jso = (JsonObject)JsonUtil.readResourceFile(path);
@@ -123,24 +123,29 @@ public class ElasticContextHttp extends ElasticContext {
    */
   public void ensureIndex(String name, boolean considerAsAlias) throws Exception {
     LOGGER.debug("Checking index: "+name);
+  //For OpenSearch this would always be true
+    this.setIs7Plus(true);
     try {
       if (name == null || name.trim().length() == 0) return;
       String result, url;
-      ElasticClient client = new ElasticClient(getBaseUrl(false),getBasicCredentials());
+      ElasticClient client = new ElasticClient(getBaseUrl(false),getBasicCredentials(),getUseHttps());
       
       result = client.sendGet(client.getBaseUrl());
       JsonObject esinfo = (JsonObject)JsonUtil.toJsonStructure(result);
       String version = esinfo.getJsonObject("version").getString("number");
       LOGGER.info("Elasticsearch version: "+version);
-      for (int i=1;i<20;i++) {
-        if (version.indexOf(i+".") == 0) {
-          int primaryVersion = i;
-          //System.out.println("primaryVersion="+primaryVersion);
-          if (primaryVersion >= 6) this.setIs6Plus(true);
-          if (primaryVersion >= 7) this.setIs7Plus(true);
-          break;
-        }
-      }
+//      for (int i=1;i<20;i++) {
+//        if (version.indexOf(i+".") == 0) {
+//          int primaryVersion = i;
+//          //System.out.println("primaryVersion="+primaryVersion);
+//          if (primaryVersion >= 6) this.setIs6Plus(true);
+//          if (primaryVersion >= 7) this.setIs7Plus(true);
+//          break;
+//        }
+//      }
+      
+        
+      
       if (getIs6Plus() && this.getUseSeparateXmlItem()) {
         LOGGER.info("Elasticsearch is version "+version+", setting useSeparateXmlItem=false");
         setUseSeparateXmlItem(false);

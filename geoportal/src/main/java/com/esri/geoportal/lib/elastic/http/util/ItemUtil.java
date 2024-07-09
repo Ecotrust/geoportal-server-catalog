@@ -111,8 +111,13 @@ public class ItemUtil {
   public JsonObject readItemJson(String indexName, String typeName, String id) throws Exception {
     ElasticClient client = ElasticClient.newClient();
     String url = client.getItemUrl(indexName,typeName,id);
-    String result = client.sendGet(url);
-    JsonObject item = (JsonObject)JsonUtil.toJsonStructure(result);
+    JsonObject item;
+    try {
+        String result = client.sendGet(url);
+        item = (JsonObject)JsonUtil.toJsonStructure(result);
+    } catch (Exception e) {
+        item = null;
+    }
     return item;
   }
   
@@ -245,7 +250,7 @@ public class ItemUtil {
     String result = client.sendPost(url,postData,contentType);
     JsonObject response = (JsonObject)JsonUtil.toJsonStructure(result);
     JsonObject hits = response.getJsonObject("hits");
-    int total = !hits.containsKey("total")? 0:
+    int total = (hits == null || !hits.containsKey("total"))? 0:
             hits.get("total").getValueType()==JsonValue.ValueType.NUMBER? hits.getInt("total"):
             hits.get("total").getValueType()!=JsonValue.ValueType.OBJECT? 0:
             !hits.getJsonObject("total").containsKey("value") || hits.getJsonObject("total").get("value").getValueType()!=JsonValue.ValueType.NUMBER? 0:

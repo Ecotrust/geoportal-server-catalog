@@ -31,6 +31,12 @@ define(["dojo/_base/declare",
   "dijit/popup",
   "dojo/text!./templates/ItemCard.html",
   "dojo/i18n!app/nls/resources",
+  "esri/map",
+  "esri/geometry/Extent",
+  "esri/symbols/SimpleFillSymbol",
+  "esri/geometry/Point",
+  "esri/graphic",
+  "esri/layers/GraphicsLayer",
   "app/context/AppClient",
   "app/etc/ServiceType",
   "app/etc/util",
@@ -50,10 +56,10 @@ define(["dojo/_base/declare",
 ],
 function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domClass, domConstruct,
   _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Tooltip, TooltipDialog, popup,
-  template, i18n, AppClient, ServiceType, util, ConfirmationDialog, ChangeOwner, DeleteItems,
-  MetadataEditor, gxeConfig, SetAccess, SetApprovalStatus, SetCollections, SetField, UploadMetadata,
-  PreviewUtil, PreviewPane, ItemHtml) {
-
+  template, i18n, Map, Extent, SimpleFillSymbol, Point, Graphic, GraphicsLayer, AppClient, ServiceType, util, 
+  ConfirmationDialog, ChangeOwner, DeleteItems, MetadataEditor, gxeConfig, SetAccess, SetApprovalStatus, 
+  SetCollections, SetField, UploadMetadata, PreviewUtil, PreviewPane, ItemHtml) {
+  
   var oThisClass = declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
     i18n: i18n,
@@ -99,11 +105,11 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
     render: function(hit) {
       var item = this.item = hit._source;
       item._id = hit._id;
-      item.title = item.title? item.title: "???";
+      item.title = this._strip(item.title);
       var links = this._uniqueLinks(item);
       this._renderTitleLink(item._id, item);
       this._renderOwnerAndDate(item);
-      util.setNodeText(this.descriptionNode,item.description);
+      util.setNodeText(this.descriptionNode,this._strip(item.description));
       this._renderThumbnail(item);
 
       this._renderFootprint(item);
@@ -112,6 +118,7 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
       this._renderLinksDropdown(item,links);
       this._renderOptionsDropdown(hit._id,item);
       this._renderAddToMap(item,links);
+      this._renderAddToCart(item);
       this._renderServiceStatus(item);
       this._renderUrlLinks(item);
       this._renderId(item);
@@ -265,6 +272,23 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
       }));
     },
 
+    _renderAddToCart: function(item) {
+      var show = AppContext.appConfig.searchResults.showShoppingCart;
+      if (show) {
+        var actionsNode = this.actionsNode;
+
+        domConstruct.create("a",{
+          href: "javascript:void(0)",
+          innerHTML: "Add to Cart",
+          title: "Add to Cart",
+          "aria-label": "Add to Cart",
+          onclick: function() {
+            topic.publish(appTopics.AddToCartClicked,item);
+          }
+        },actionsNode);
+      }
+    },
+
     _renderItemLinks: function(itemId,item) {
       if (AppContext.appConfig.searchResults.showLinks) {
         var actionsNode = this.actionsNode;
@@ -310,7 +334,7 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
     _renderDataHtml: function(item, uri) {
       console.log(item);
       var itemHtml = new ItemHtml({
-        title: item.title,
+        title: this._strip(item.title),
         uri: uri,
         style: "width: 80%; max-width: 80%; height: 80%; max-height: 80%;",
         onHide: function() {
@@ -319,42 +343,45 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
       });
       itemHtml.show();
     },
-
     _renderLinksDropdown: function(item,links) {
-      if (links.length === 0) return;
-      var dd = domConstruct.create("div",{
-        "class": "dropdown",
-        "style": "display:inline-block;"
-      },this.actionsNode);
-      var ddbtn = domConstruct.create("a",{
-        "class": "dropdown-toggle",
-        "href": "javascript:void(0)",
-        "data-toggle": "dropdown",
-        "aria-haspopup": true,
-        "aria-expanded": true,
-        title: string.substitute(i18n.item.actions.titleFormat, {action: i18n.item.actions.links, title: item.title}),
-        "aria-label": string.substitute(i18n.item.actions.titleFormat, {action: i18n.item.actions.links, title: item.title}),
-        innerHTML: i18n.item.actions.links
-      },dd);
-      domConstruct.create("span",{
-        "class": "caret"
-      },ddbtn);
-      var ddul = domConstruct.create("ul",{
-        "class": "dropdown-menu",
-      },dd);
-      array.forEach(links, function(u){
-        var ddli = domConstruct.create("li",{},ddul);
-        domConstruct.create("a",{
-          "class": "small",
-          href: u,
-          target: "_blank",
-          title: string.substitute(i18n.item.actions.titleFormat, {action: u, title: item.title}),
-          "aria-label": string.substitute(i18n.item.actions.titleFormat, {action: u, title: item.title}),
-          innerHTML: u
-        },ddli);
-      });
-      this._mitigateDropdownClip(dd,ddul);
-    },
+    	var dd = domConstruct.create("div",{
+          "class": "dropdown"
+        },this.actionsNode);
+          
+    	var ddbtn = domConstruct.create("a",{
+            "class": "dropdown-toggle",
+            "href": "javascript:void(0)",            
+            "id":"dropdownMenuLink",
+            "data-bs-toggle": "dropdown",            
+            "aria-expanded": false,
+            "title": string.substitute(i18n.item.actions.titleFormat, {action: i18n.item.actions.links, title: item.title}),
+            "aria-label": string.substitute(i18n.item.actions.titleFormat, {action: i18n.item.actions.links, title: item.title}),
+             innerHTML: i18n.item.actions.links
+          },dd);
+
+    	domConstruct.create("span",{
+            "class": "caret"
+          },ddbtn);
+          
+          var ddul = domConstruct.create("ul",{
+            "class": "dropdown-menu",
+            "aria-labelledby":"dropdownMenuLink"
+          },dd);
+          
+          array.forEach(links, function(u){
+            var ddli = domConstruct.create("li",{},ddul);
+            domConstruct.create("a",{
+              "class": "small",
+              href: u,
+              target: "_blank",
+              title: string.substitute(i18n.item.actions.titleFormat, {action: u, title: item.title}),
+              "aria-label": string.substitute(i18n.item.actions.titleFormat, {action: u, title: item.title}),
+              innerHTML: u
+            },ddli);
+          });
+         // this._mitigateDropdownClip(dd,ddul);
+    },    
+
 
     _renderOptionsDropdown: function(itemId,item) {
       var self = this;
@@ -508,9 +535,10 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
       var ddbtn = domConstruct.create("a",{
         "class": "dropdown-toggle",
         "href": "javascript:void(0)",
-        "data-toggle": "dropdown",
+        "id":"optionsDropdownMenuLink",
+        "data-bs-toggle": "dropdown",        
         "aria-haspopup": true,
-        "aria-expanded": true,
+        "aria-expanded": false,
         innerHTML: i18n.item.actions.options.caption
       },dd);
       domConstruct.create("span",{
@@ -518,12 +546,13 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
       },ddbtn);
       var ddul = domConstruct.create("ul",{
         "class": "dropdown-menu",
+        "aria-labelledby":"optionsDropdownMenuLink"
       },dd);
       array.forEach(links,function(link){
         var ddli = domConstruct.create("li",{},ddul);
         ddli.appendChild(link);
       });
-      this._mitigateDropdownClip(dd,ddul);
+     // this._mitigateDropdownClip(dd,ddul);
     },
 
     _renderOwnerAndDate: function(item) {
@@ -825,7 +854,7 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
           href: href,
           target: "_blank",
           "class": "g-item-status",
-          innerHTML: caption
+          innerHTML:this._strip(caption)
         }, actionsNode);
       }
     },
@@ -864,6 +893,8 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
           "aria-label": item.title,
           innerHTML: innerHtml
         },titleNode);
+        htmlNode.appendChild(document.createTextNode(item.title));
+        
         this.own(on(htmlNode, "click", lang.hitch({self: this, item: item}, function(evt){
           var uri = "./rest/metadata/item/"+encodeURIComponent(itemId) + "/html";
           if (AppContext.geoportal.supportsApprovalStatus ||
@@ -874,7 +905,11 @@ function(declare, lang, array, string, topic, xhr, on, appTopics, domStyle, domC
           this.self._renderDataHtml(item, uri);
         })));
       }
-
+    },
+	  
+    _strip: function(html) {
+      let doc = new DOMParser().parseFromString(html, 'text/html');
+      return doc.body.textContent || "Metadata Information";
     }
   });
 

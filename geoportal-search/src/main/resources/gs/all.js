@@ -25,6 +25,8 @@
   if (!gs.context.node) gs.context.node = {};
   if (!gs.provider) gs.provider = {};
   if (!gs.provider.csw) gs.provider.csw = {};
+  if (!gs.provider.ogcrecords) gs.provider.ogcrecords = {};
+  if (!gs.provider.stac) gs.provider.stac = {};
   if (!gs.provider.opensearch) gs.provider.opensearch = {};
   if (!gs.target) gs.target = {};
   if (!gs.target.csw) gs.target.csw = {};
@@ -57,6 +59,8 @@
       "provider/csw/DescribeRecordParser",
       "provider/csw/OwsException",
       "provider/opensearch/OpensearchProvider",
+      "provider/ogcrecords/OGCRecordsProvider",
+      "provider/stac/STACProvider",
       "target/Target",
       "target/TargetSchema",
       "target/csw/CswTarget",

@@ -25,9 +25,10 @@ define(["dojo/_base/declare",
         "app/search/SearchComponent",
         "app/search/DropPane",
         "app/search/QClause",
-        "app/search/CollectionsFilterSettings"], 
+        "app/search/CollectionsFilterSettings",
+        "app/context/AppClient"], 
 function(declare, lang, array, domConstruct, domClass, dojoRequest, topic, appTopics, template, i18n, SearchComponent, 
-  DropPane, QClause, CollectionsFilterSettings) {
+  DropPane, QClause, CollectionsFilterSettings, AppClient) {
   
   var oThisClass = declare([SearchComponent], {
     
@@ -152,7 +153,7 @@ function(declare, lang, array, domConstruct, domClass, dojoRequest, topic, appTo
     },
     
     processResults: function(searchResponse) {
-      var url = "./elastic/"+AppContext.geoportal.metadataIndexName+"/item/_search";
+      var url = "./elastic/"+AppContext.geoportal.metadataIndexName+"/_search";
 
       if (AppContext.geoportal.supportsApprovalStatus || 
           AppContext.geoportal.supportsGroupBasedAccess) {

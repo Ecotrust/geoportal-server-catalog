@@ -76,9 +76,9 @@ function(declare, lang, VectorTileLayer) {
           if (lc.indexOf("?service=wms") > 0 || lc.indexOf("&service=wms") > 0) {
             type = "WMS";
           } else if (lc.indexOf("?service=wmts") > 0 || lc.indexOf("&service=wmts") > 0) {
-            //type = "WMTS";
+            type = "WMTS";
           } else if (lc.indexOf("?service=wfs") > 0 || lc.indexOf("&service=wfs") > 0) {
-            //type = "WFS";
+            type = "WFS";
           } else if (lc.indexOf("?service=wcs") > 0 || lc.indexOf("&service=wcs") > 0) {
           }
         } else if (lc.indexOf("/com.esri.wms.esrimap") !== -1) {
@@ -100,6 +100,12 @@ function(declare, lang, VectorTileLayer) {
               type = "VectorTileServer";
             }
           }
+        } else if (lc.indexOf("/wms.axd/") > 0) {
+          type = "WMS";
+        } else if (lc.indexOf("/wmts.axd/") > 0) {
+          type = "WMTS";
+        } else if (lc.indexOf("/wfs.axd/") > 0) {
+          type = "WFS";
         }
         if (type === null) {
           if (endsWith(lc,".kml") || endsWith(lc,".kmz") || endsWith(lc,"kml.php") ||

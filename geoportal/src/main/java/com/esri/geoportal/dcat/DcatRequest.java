@@ -50,6 +50,7 @@ public abstract class DcatRequest {
   private final String selfInfo;
   private final ScriptEngine engine;
   private long dataCounter;
+  private String baseUrl;
 
   /**
    * Creates instance of the request.
@@ -62,6 +63,13 @@ public abstract class DcatRequest {
     this.selfInfo = selfInfo;
     this.engine = engine;
   }
+  
+  public DcatRequest(DcatContext dcatContext, String selfInfo, ScriptEngine engine,String baseUrl) {
+	    this.dcatContext = dcatContext;
+	    this.selfInfo = selfInfo;
+	    this.engine = engine;
+	    this.baseUrl = baseUrl;
+	  }
   
   /**
    * Puts response.
@@ -116,6 +124,7 @@ public abstract class DcatRequest {
       requestInfo.set("parameterMap", parameterMap);
       parameterMap.put("f", "dcat");
       parameterMap.put("size", Integer.toString(PAGE_SIZE));
+      parameterMap.put("baseUrl",this.baseUrl);
       
       ArrayNode sortNode = MAPPER.createArrayNode();
       sortNode.add("_id:asc");
@@ -136,8 +145,8 @@ public abstract class DcatRequest {
   
   private void processData(JsonNode data) {
     try {
-      String lastIdentifier = null;
-
+      String lastIdentifier = null;      
+      
       DcatHeaderExt header = MAPPER.convertValue(data, DcatHeaderExt.class);
       JsonNode dataset = data.get("dataset");
 
@@ -180,13 +189,22 @@ public abstract class DcatRequest {
     onEnd(complete, exception);
   }
   
+  private static class DcatHeaderExtES7 extends DcatHeaderExt {
+    public Integer value;
+    public String relation;
+  }
+  
   private static class DcatHeaderExt extends DcatHeader {
 
     public Integer start;
     public Integer num;
     public Integer total;
+    //public DcatHeaderExtES7 total;
     public Integer nextStart;
 
+    public DcatHeaderExt() {
+      //System.out.println("here");
+    }
   }
   
 }

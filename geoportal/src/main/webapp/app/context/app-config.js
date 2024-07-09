@@ -27,6 +27,8 @@ define([],function(){var obj={
 
   searchMap: {
     basemap: "streets",
+    basemapUrl: "",
+    isTiled: false,
     autoResize: true,
     wrapAround180: true,
     center: [-98, 40],
@@ -41,11 +43,13 @@ define([],function(){var obj={
     showFootprint: true,
     showAccess: true,
     showApprovalStatus: true,
-    defaultSort: "title.sort:asc",
+    defaultSort: '{"title.keyword": {"order" : "asc" ,"unmapped_type": "String"}}',   
+    sortDesc:'{"title.keyword": {"order" : "desc" ,"unmapped_type": "String"}}',
     showLinks: true,
     showCustomLinks: true,
     showOpenSearchLinks: true,
-    showTotalCountInHierarchy: true
+    showTotalCountInHierarchy: true,
+    showShoppingCart: false
   },
 
   statusChecker: {
