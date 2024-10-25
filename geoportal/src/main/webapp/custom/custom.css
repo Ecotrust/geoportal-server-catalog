@@ -324,12 +324,16 @@ body {
 
 .g-item-title a {
   color: #333;
+  text-wrap: initial;
+  word-break: break-word;
 }
 
 .g-item-title a:hover,
 .g-item-title a:visited,
 .g-item-title a:focus {
   text-decoration: none;
+  text-wrap: initial;
+  word-break: break-word;
 }
 
 .g-item-card-info-container {
