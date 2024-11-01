@@ -53,6 +53,16 @@ public class DcatBuilder {
   /** The script engines. */
   private static final Map<String,ScriptEngine> ENGINES = Collections.synchronizedMap(new HashMap<String,ScriptEngine>());
   
+  private String baseUrl = "http://localhost:8080/geoportal";
+  public String getBaseUrl() {
+	return baseUrl;
+	}
+	
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+	
+  
   /** JSON processing. */
   private static final ObjectMapper MAPPER = new ObjectMapper();
   static {
@@ -79,14 +89,16 @@ public class DcatBuilder {
   public void build(DcatContext dcatContext) {
     try {
       LOGGER.info(String.format("Starting building aggregated DCAT file..."));
-      execute(dcatContext, getSelfInfo(), getCachedEngine(javascriptFile));
+      execute(dcatContext, getSelfInfo(), getCachedEngine(javascriptFile),getBaseUrl());
     } catch(Exception ex) {
       LOGGER.error(String.format("Error building aggregated DCAT file!"), ex);
     }
   }
   
-  private void execute(DcatContext dcatContext, String selfInfo, ScriptEngine engine) {
-      DcatRequestImpl request = new DcatRequestImpl(dcatContext, selfInfo, engine);
+  
+
+private void execute(DcatContext dcatContext, String selfInfo, ScriptEngine engine, String baseUrl) {
+      DcatRequestImpl request = new DcatRequestImpl(dcatContext, selfInfo, engine,baseUrl );
       synchronized (request) {
         request.execute();
         try {
@@ -126,8 +138,8 @@ public class DcatBuilder {
       if (com.esri.geoportal.context.GeoportalContext.getInstance().getElasticContext().getUseHttps()) {
         scheme = "https://";
       }
-      String username = com.esri.geoportal.context.GeoportalContext.getInstance().getElasticContext().getXpackUsername();
-      String password = com.esri.geoportal.context.GeoportalContext.getInstance().getElasticContext().getXpackPassword();
+      String username = com.esri.geoportal.context.GeoportalContext.getInstance().getElasticContext().getUsername();
+      String password = com.esri.geoportal.context.GeoportalContext.getInstance().getElasticContext().getPassword();
       if (username != null && username.length() > 0 && password != null && password.length() > 0) {
         elastic.add("username",username);
         elastic.add("password",password);
@@ -160,8 +172,11 @@ public class DcatBuilder {
     }
     if ((node != null) && (node.length() > 0)) {
       String idxName = com.esri.geoportal.context.GeoportalContext.getInstance().getElasticContext().getIndexName();
-      String itmType = com.esri.geoportal.context.GeoportalContext.getInstance().getElasticContext().getItemIndexType();       
-      String url = scheme+node+":"+port+"/"+idxName+"/"+itmType+"/_search";
+      String itmType = com.esri.geoportal.context.GeoportalContext.getInstance().getElasticContext().getItemIndexType();    
+    //  String url = scheme+node+":"+port+"/"+idxName+"/"+itmType+"/_search";
+      
+      //For elastic 7.9.3 +
+      String url = scheme+node+":"+port+"/"+idxName+"/_search";
       elastic.add("searchUrl",url);
       info.add("elastic",elastic);
       return info.build().toString();
@@ -177,6 +192,10 @@ public class DcatBuilder {
     public DcatRequestImpl(DcatContext dcatContext, String selfInfo, ScriptEngine engine) {
       super(dcatContext, selfInfo, engine);
     }
+    
+    public DcatRequestImpl(DcatContext dcatContext, String selfInfo, ScriptEngine engine, String requestInfo) {
+        super(dcatContext, selfInfo, engine,requestInfo);
+      }
 
     @Override
     public void onRec(DcatHeader header, String rec) throws IOException {

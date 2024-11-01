@@ -156,7 +156,7 @@ var G = {
       } else if (lc.indexOf("/rest/services/") > 0) {
         for (i=0;i<arcgisTypes.length;i++) {
           v = "/"+arcgisTypes[i].toLowerCase();
-          if (endsWith(lc,v)) {
+          if ((endsWith(lc,v)) || (lc.indexOf(v + "/") > 0)) {
             linkType = arcgisTypes[i];
             linkUrl = url;
             break;
@@ -174,6 +174,30 @@ var G = {
       if (linkType === null) {
         if (lc.indexOf("com.esri.wms.esrimap")>= 0) {
           linkType = "IMS";
+          linkUrl = url;
+        }
+      }
+      if (linkType === null) {
+        if (lc.indexOf("cuahsi_1_1.asmx")>= 0) {
+          linkType = "WaterOneFlow";
+          linkUrl = url;
+        }
+      }
+      if (linkType === null) {
+        if (lc.indexOf("/wms.axd/") > 0) {
+          linkType = "WMS";
+          linkUrl = url;
+        }
+      }
+      if (linkType === null) {
+        if (lc.indexOf("/wmts.axd/") > 0) {
+          linkType = "WMTS";
+          linkUrl = url;
+        }
+      }
+      if (linkType === null) {
+        if (lc.indexOf("/wfs.axd/") > 0) {
+          linkType = "WFS";
           linkUrl = url;
         }
       }
@@ -272,7 +296,7 @@ var G = {
         v = node.getNodeValue();
       }
       if (typeof v === "string") {
-        return v;
+        return this._strip(v);
       }
     }
     return null;
@@ -390,7 +414,12 @@ var G = {
     
     inReader.close();
     return response.toString();
-  }
+  },
   
-  
+  // strip HTML markup from string
+  _strip: function(html) {
+    //var doc = new DOMParser().parseFromString(html, 'text/html');
+    // return doc.body.textContent || "Metadata Information";
+    return html.replace(/<\/?("[^"]*"|'[^']*'|[^>])*(>|$)/g, "HTML Markup Was Removed");
+  }  
 };

@@ -18,6 +18,7 @@ import com.esri.geoportal.context.GeoportalContext;
 import com.esri.geoportal.lib.elastic.ElasticContext;
 import com.esri.geoportal.lib.elastic.http.ElasticClient;
 import com.esri.geoportal.lib.elastic.http.util.AccessUtil;
+import com.esri.geoportal.lib.elastic.request.BulkEditRequest;
 
 import java.io.FileNotFoundException;
 import javax.ws.rs.core.MediaType;
@@ -26,7 +27,7 @@ import javax.ws.rs.core.Response;
 /**
  * Get an item.
  */
-public class GetItemRequest extends com.esri.geoportal.lib.elastic.request.GetItemRequest {
+public class GetItemRequest extends BulkEditRequest {
   
   /** Instance variables. */
   private String f;
@@ -116,6 +117,33 @@ public class GetItemRequest extends com.esri.geoportal.lib.elastic.request.GetIt
     }
     return response;
   }
+  
+  public AppResponse executeNOAuth() throws Exception {    
+	    AppResponse response = new AppResponse();
+	    String id = getId();
+	    if (id == null || id.length() == 0) {
+	      response.writeIdIsMissing(this);
+	      return response;
+	    }
+	   	    
+	    ElasticContext ec = GeoportalContext.getInstance().getElasticContext();
+	    ElasticClient client = ElasticClient.newClient();
+	    String url = client.getItemUrl(ec.getIndexName(),ec.getActualItemIndexType(),id);
+	   
+	    
+	    try {
+	      String result = client.sendGet(url);
+	      //if (this.getIncludeMetadata()) setXml(itemio.readXml(ec,id)); // TODO
+	      if (result != null && result.length() > 0) {
+	        this.writeOk(response,result);
+	      } else {
+	        response.writeIdNotFound(this,id);
+	      }
+	    } catch (FileNotFoundException e) {
+	      response.writeIdNotFound(this,id);
+	    }
+	    return response;
+	  }
   
   
   /**

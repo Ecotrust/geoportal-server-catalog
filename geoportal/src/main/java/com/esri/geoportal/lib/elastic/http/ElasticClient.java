@@ -21,11 +21,20 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.security.SecureRandom;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.esri.geoportal.context.GeoportalContext;
 import com.esri.geoportal.lib.elastic.ElasticContext;
-import org.apache.commons.lang3.StringUtils;
+import com.esri.geoportal.lib.elastic.ElasticContextHttp;
 
 /**
  * An HTTP client for Elasticsearch.
@@ -35,6 +44,9 @@ public class ElasticClient {
   /** Instance variables. */
   private String baseUrl;
   private String basicCredentials;
+  private boolean useHttps;
+  /** Logger. */
+  private static final Logger LOGGER = LoggerFactory.getLogger(ElasticContextHttp.class);
   
   /**
    * Create a new client.
@@ -42,17 +54,19 @@ public class ElasticClient {
    */
   public static ElasticClient newClient() {
     ElasticContext ec = GeoportalContext.getInstance().getElasticContext();
-    return new ElasticClient(ec.getBaseUrl(true),ec.getBasicCredentials());
+    return new ElasticClient(ec.getBaseUrl(true),ec.getBasicCredentials(),ec.getUseHttps());
   }
   
   /**
    * Constructor.
    * @param baseUrl the Elasticsearch base URL
    * @param basicCredentials basic credentials
+   * @param useHttps use http (false) or https (true)
    */
-  public ElasticClient(String baseUrl, String basicCredentials) {
+  public ElasticClient(String baseUrl, String basicCredentials,boolean useHttps) {
     this.baseUrl = baseUrl;
     this.basicCredentials = basicCredentials;
+    this.useHttps = useHttps;
   }
   
   /**
@@ -126,6 +140,10 @@ public class ElasticClient {
     return baseUrl + "/" + encode(indexName) + (typeName!=null? "/" + encode(typeName): "");
   }
   
+  public String getTypeUrlForSearch(String indexName) throws UnsupportedEncodingException {	   
+	    return baseUrl + "/" + encode(indexName);
+	  }
+  
   /**
    * Get an XML URL.
    * @param indexName the index name
@@ -149,18 +167,38 @@ public class ElasticClient {
    * @throws Exception if an exception occurs
    */
   public String send(String method, String url, String data, String dataContentType) throws Exception {
-    String result = null;
-    BufferedReader br = null;
-    DataOutputStream wr = null;
-    StringWriter sw = new StringWriter();
-    HttpURLConnection con = null;
-    String charset = "UTF-8";
-    try {
-      URL u = new java.net.URL(url);
-      HttpURLConnection.setFollowRedirects(true);
-      con = (HttpURLConnection)u.openConnection();
-      con.setRequestMethod(method);
-      con.setInstanceFollowRedirects(true);
+		String result = null;
+	    BufferedReader br = null;
+	    DataOutputStream wr = null;
+	    StringWriter sw = new StringWriter();	   
+	    String charset = "UTF-8";
+	    URLConnection con = null;
+	    URL u = new java.net.URL(url);
+	    try {
+		 if(useHttps)
+		 {
+			 SSLContext ssl_ctx = SSLContext.getInstance("TLS");
+			 //Using a mock trust manager and not validating certificate
+			 MockTrustManager mockTrustMgr = new MockTrustManager();
+			 
+	        ssl_ctx.init(null,                // key manager
+	        		mockTrustMgr.getTrustManager(),// trust manager
+	                     new SecureRandom()); // random number generator
+	        HttpsURLConnection.setDefaultSSLSocketFactory(ssl_ctx.getSocketFactory());
+			 
+			 HttpsURLConnection.setFollowRedirects(true);
+			 con = (HttpsURLConnection)u.openConnection();
+			 ((HttpsURLConnection) con).setRequestMethod(method);
+			 ((HttpsURLConnection) con).setInstanceFollowRedirects(true);
+		 }
+		 else
+		 {
+			 HttpURLConnection.setFollowRedirects(true);
+			 con = (HttpURLConnection)u.openConnection();
+			 ((HttpURLConnection) con).setRequestMethod(method);
+			 ((HttpURLConnection) con).setInstanceFollowRedirects(true);
+		 }
+     
       if (basicCredentials != null && basicCredentials.length() > 0) {
         con.setRequestProperty( "Authorization",basicCredentials);
       }
@@ -191,30 +229,33 @@ public class ElasticClient {
           }
         }        
       }
-      br = new BufferedReader(new InputStreamReader(con.getInputStream(),charset));
+      int code = ((HttpURLConnection) con).getResponseCode();
+      
+      //In case of error, Read error stream
+      if(code >= 400)
+      {
+    	  LOGGER.debug("Error code received : "+code);
+    	  if(((HttpURLConnection) con).getErrorStream()!=null)
+    	  {
+    		  br = new BufferedReader(new InputStreamReader(((HttpURLConnection) con).getErrorStream(),charset)); 
+    	  }    
+    	  else if(((HttpURLConnection) con).getInputStream()!=null)
+    	  {
+    		  br = new BufferedReader(new InputStreamReader(((HttpURLConnection) con).getInputStream(),charset)); 
+    	  }
+      }
+      else
+      {
+    	  br = new BufferedReader(new InputStreamReader(con.getInputStream(),charset));
+      }
+      
       int nRead = 0;
       char[] buffer = new char[4096];
       while ((nRead = br.read(buffer,0,4096)) >= 0) {
         sw.write(buffer,0,nRead);
       }
       result = sw.toString();
-//    } catch(IOException ex) {
-//      try {
-//        if (con != null && br == null) {
-//          int code = con.getResponseCode();
-//          System.err.println("code="+code);
-//          br = new BufferedReader(new InputStreamReader(con.getInputStream(),charset));
-//          int nRead = 0;
-//          char[] buffer = new char[4096];
-//          while ((nRead = br.read(buffer,0,4096)) >= 0) {
-//            sw.write(buffer,0,nRead);
-//          }
-//          System.err.println("error="+sw.toString());
-//        }
-//      } catch (Exception ex1) {
-//        ex1.printStackTrace();
-//      }
-//      throw ex;
+
     } finally {
       try {if (wr != null) wr.close();} catch(Exception ef) {ef.printStackTrace();}
       try {if (br != null) br.close();} catch(Exception ef) {ef.printStackTrace();}

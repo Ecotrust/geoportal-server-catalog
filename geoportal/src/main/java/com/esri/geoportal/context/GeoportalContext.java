@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 package com.esri.geoportal.context;
+import com.esri.geoportal.base.security.Group;
 import com.esri.geoportal.lib.elastic.ElasticContext;
 import com.esri.geoportal.lib.harvester.HarvesterContext;
 
@@ -20,6 +21,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,11 +57,24 @@ public class GeoportalContext implements ApplicationContextAware {
   private HarvesterContext harvesterContext;
   private boolean supportsApprovalStatus = false;
   private boolean supportsGroupBasedAccess = false;
-  private String version = "2.6.0";
+  private String version = "2.7.2";
   private boolean parseGml;
   private boolean supportsCollections = false;
+  // HashMap stores userName and List of User Groups in ArcGISAuthentication
+  private HashMap<String,ArrayList<Group>> userGroupMap = new HashMap<String,ArrayList<Group>>(); 
+  private int numStacFeaturesAddItem = 100; 
+  private boolean validateStacFields = false;
   
-  /** Constructor */
+
+  public HashMap<String, ArrayList<Group>> getUserGroupMap() {
+	return userGroupMap;
+}
+
+public void setUserGroupMap(HashMap<String, ArrayList<Group>> userGroupMap) {
+	this.userGroupMap = userGroupMap;
+}
+
+/** Constructor */
   public GeoportalContext() {}
   
   /** The Spring application context. */
@@ -162,6 +180,22 @@ public class GeoportalContext implements ApplicationContextAware {
   public void setSupportsCollections(boolean supportsCollections) {
     this.supportsCollections = supportsCollections;
   }
+  //Number of Stac features allowed in POST request
+	public int getNumStacFeaturesAddItem() {
+		return numStacFeaturesAddItem;
+	}
+
+	public void setNumStacFeaturesAddItem(int numStacFeaturesAddItem) {
+		this.numStacFeaturesAddItem = numStacFeaturesAddItem;
+	}
+	 //Validate Stac fields in Stac Feature in POST request
+	public boolean isValidateStacFields() {
+		return this.validateStacFields;
+	}
+
+	public void setValidateStacFields(boolean validateStacFields) {
+		this.validateStacFields = validateStacFields;
+	}
   
   /** Methods =============================================================== */
 
@@ -223,5 +257,6 @@ public class GeoportalContext implements ApplicationContextAware {
   public void setParseGml(boolean parseGml) {
     this.parseGml = parseGml;
   }
+
 
 }

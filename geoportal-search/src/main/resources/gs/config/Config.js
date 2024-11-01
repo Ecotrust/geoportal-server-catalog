@@ -17,7 +17,7 @@
 
   gs.config.Config = gs.Object.create(gs.Proto,{
 
-    defaultTarget: {writable: true, value: "arcgis"},
+    defaultTarget: {writable: true, value: "customElastic"},
     
     // allow POSTing of Elasticsearch DSL (Domain Specific Language) queries and aggregations
     allowDslSearches: {writable: true, value: true},
@@ -29,8 +29,26 @@
     csw2CapabilitiesFile: {writable: true, value: "gs/config/csw2-capabilities.xml"},
 
     csw2DescribeRecordFile: {writable: true, value: "gs/config/csw2-describerecord.xml"},
+    
+    csw2GetDomainFile: {writable: true, value: "gs/config/csw2-getdomain.xml"},
 
     opensearchDescriptionFile: {writable: true, value: "gs/config/opensearch-description.xml"},
+
+    ogcrecordsDescriptionFile: {writable: true, value: "gs/config/ogcrecords-description.json"},
+
+    ogcrecordsConformanceFile: {writable: true, value: "gs/config/ogcrecords-conformance.json"},
+
+    ogcrecordsCollectionsFile: {writable: true, value: "gs/config/ogcrecords-collections.json"},
+
+    ogcrecordsCollectionMetadataFile: {writable: true, value: "gs/config/ogcrecords-collection-metadata.json"},
+
+    ogcrecordsItemsFile: {writable: true, value: "gs/config/ogcrecords-items.json"},
+
+    ogcrecordsQueryablesFile: {writable: true, value: "gs/config/ogcrecords-queryables.json"},
+
+    ogcrecordsAPIFile: {writable: true, value: "gs/config/ogcrecords-api.json"},
+
+    ogcrecordsSchemaFile: {writable: true, value: "gs/config/ogcrecords-schema.json"},
 
     proxyUrl: {writable: true, value: null},
 
@@ -45,6 +63,13 @@
 
       var targets = {
 
+        "customElastic": gs.Object.create(gs.target.elastic.CustomElasticTarget).mixin({
+          "searchUrl": "https://gpt.geocloud.com/geoportal2/elastic/metadata/item/_search",
+          "itemBaseUrl": null,
+          "schemaMixin": {
+            "useTotalHits": false,
+           }
+        }),
         "arcgis": gs.Object.create(gs.target.portal.PortalTarget).mixin({
           "portalBaseUrl": "https://www.arcgis.com"
         })
