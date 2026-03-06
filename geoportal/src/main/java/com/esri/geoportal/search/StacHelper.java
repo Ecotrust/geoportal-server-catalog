@@ -1,11 +1,14 @@
 package com.esri.geoportal.search;
 
-import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -21,21 +24,22 @@ import com.esri.geoportal.context.GeoportalContext;
 import com.esri.geoportal.lib.elastic.ElasticContext;
 import com.esri.geoportal.lib.elastic.http.ElasticClient;
 import com.esri.geoportal.lib.elastic.util.FieldNames;
-import com.esri.geoportal.service.stac.StacContext;
 import com.esri.geoportal.service.stac.Asset;
 import com.esri.geoportal.service.stac.Collection;
 import com.esri.geoportal.service.stac.GeometryServiceClient;
+import com.esri.geoportal.service.stac.StacContext;
+import com.esri.geoportal.service.stac.filter.Cql2JsonToOpenSearchConverter;
+import com.esri.geoportal.service.stac.filter.CqlQueryToOpenSearchConverter;
+import com.esri.geoportal.service.stac.filter.CqlTextToOpenSearchConverter;
+import com.esri.geoportal.service.stac.filter.StacFilterLang;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
 import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 
 
 public class StacHelper {
@@ -234,10 +238,23 @@ public class StacHelper {
 
 		}
 		if (queryMap.containsKey("datetime")) {
-			String dateTimeQry = prepareDateTime(queryMap.get("datetime"));
+			String dateTimeQry = prepareDateTimeFld(FieldNames.FIELD_SYS_MODIFIED,queryMap.get("datetime"));
 			if (dateTimeQry.length() > 0)
 				builder.add(JsonUtil.toJsonStructure(dateTimeQry));
 		}
+		
+		if (queryMap.containsKey("updated")) {
+			String dateTimeQry = prepareDateTimeFld(FieldNames.FIELD_SYS_MODIFIED,queryMap.get("updated"));
+			if (dateTimeQry.length() > 0)
+				builder.add(JsonUtil.toJsonStructure(dateTimeQry));
+		}
+		
+		if (queryMap.containsKey("created")) {
+			String dateTimeQry = prepareDateTimeFld(FieldNames.FIELD_SYS_CREATED,queryMap.get("created"));
+			if (dateTimeQry.length() > 0)
+				builder.add(JsonUtil.toJsonStructure(dateTimeQry));
+		}
+		
 		if (queryMap.containsKey("ids")) {
 			String idsQry = prepareIds(queryMap.get("ids"));
 			System.out.println("ids " + idsQry);
@@ -262,9 +279,20 @@ public class StacHelper {
 			builder.add(JsonUtil.toJsonStructure(statusQry));
 		}
     
-		if (queryMap.containsKey("filterClause")) {			
-			String filterQry = prepareFilter(queryMap.get("filterClause"));
+		if (queryMap.containsKey("filterClause")) {	
+			String filterQry="";
+			StacFilterLang filterLang = StacFilterLang.CQL2TEXT;
+			if(queryMap.containsKey("filterLang"))
+			{
+				filterLang = StacFilterLang.fromValue(queryMap.get("filterLang"));
+				filterQry = prepareFilter(queryMap.get("filterClause"),filterLang);
+			}		
+			 
 			builder.add(JsonUtil.toJsonStructure(filterQry));
+		}
+		if (queryMap.containsKey("queryJson")) {			
+			String queryExt = prepareQueryExtension(queryMap.get("queryJson"));
+			builder.add(JsonUtil.toJsonStructure(queryExt));
 		}
 
 		JsonArray filter = builder.build();
@@ -284,9 +312,26 @@ public class StacHelper {
 	}
 
 
-  private static String prepareStatus(String status) {
+  private static String prepareQueryExtension(String queryJson) {
+	  String queryOpenSearch ="";
+	  try {
+		  CqlQueryToOpenSearchConverter converter = new CqlQueryToOpenSearchConverter(false, ".keyword");
+		  queryOpenSearch = converter.convert(queryJson); 
+		  
+		//Replace fields with field mappings
+		  queryOpenSearch = replaceFldWithFldMapping(queryOpenSearch);
+	  }
+	 catch(Exception ex)
+	  {
+		 LOGGER.info("query extension input could not be converted to open search query",ex);
+	  }
+	  return queryOpenSearch;
+	}
+
+
+private static String prepareStatus(String status) {
 	  	StacContext sc = StacContext.getInstance();
-		return prepareFilter(sc.getStatusFld()+"="+status);
+		return prepareFilter(sc.getStatusFld()+"="+status,StacFilterLang.CQL2TEXT);
 		
 	}
 
@@ -324,9 +369,8 @@ public class StacHelper {
 	}
 
 
-	private static String prepareDateTime(String datetime) {
-		String query = "";
-		String dateTimeFld = FieldNames.FIELD_SYS_MODIFIED;
+	private static String prepareDateTimeFld(String datetimeFldName, String dateTimeFldVal) {
+		String query = "";		
 		
 		String dateTimeFldQuery = "";
 		// Find from and to dates
@@ -338,9 +382,9 @@ public class StacHelper {
 		// A closed interval: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
 		// Open intervals: "2018-02-12T00:00:00Z/.." or "../2018-03-18T12:31:12Z"
 
-		String fromField = datetime;
+		String fromField = dateTimeFldVal;
 		String toField = "";
-		List<String> dateFlds = Arrays.asList(datetime.split("/"));
+		List<String> dateFlds = Arrays.asList(dateTimeFldVal.split("/"));
 
 		if (dateFlds.size() > 1) {
 			fromField = dateFlds.get(0);
@@ -354,10 +398,12 @@ public class StacHelper {
 			dateTimeFldQuery = "{\"gte\": \"" + fromField + "\",\"lte\":\"" + toField + "\"}";
 		}
 
-		query = "{\"range\": {\"" + dateTimeFld + "\":" + dateTimeFldQuery + "}}";
+		query = "{\"range\": {\"" + datetimeFldName + "\":" + dateTimeFldQuery + "}}";
 
 		return query;
 	}
+	
+	
 
 	private static String prepareBbox(String bboxString) {
 		String field = "envelope_geo";
@@ -404,38 +450,52 @@ public class StacHelper {
 		collectionQryBuf.append("]}}");
 		return collectionQryBuf.toString();
 	}
-  
-  public static String prepareFilter(String filterClause) {
-    String filterField;
-    String filterValue;
-    StacContext sc = StacContext.getInstance();
-    Map<String, String> fieldMapping = sc.getFieldMappings();
-    
-		String[] clauseList = filterClause.split("AND");
-		//{"bool":{"must":[{"match":{"clause_field1":"clause_value1"}},{"match":{"clause_field2":"clause_value2"}}]}}
-		
-		StringBuilder filterQryBuf = new StringBuilder("{\"bool\":{\"must\":[");
-		int i=0;
-		for (String clause : clauseList) {
-      filterField = clause.split("=")[0].trim();
-      // replace filterField with mapped index field if the filterField is mapped
-      if (fieldMapping.containsKey(filterField)) {
-        filterField = fieldMapping.get(filterField);
-      }
-      filterValue = clause.split("=")[1].trim();
-			if(i>0) {
-        filterQryBuf.append(",");
-      }
-      filterQryBuf.append("{\"match\": {\"")
-                  .append(filterField)
-                  .append("\": \"")
-                  .append(filterValue)
-                  .append("\"}}");	
-			i++;
+	
+	/**
+	 * @param filterClause
+	 * @param filterLang cql2-json or cql2-text (GET requests should be cql2-text and POST search will be cql2-json)
+	 * @return
+	 */
+	//Issue #684 supports filter extension https://github.com/stac-api-extensions/filter
+	public static String prepareFilter(String filterClause, StacFilterLang filterLang) {
+		String filterQryOpenSearch = "";
+		try {
+			if(filterLang.equals(StacFilterLang.CQL2JSON))
+			{
+				Cql2JsonToOpenSearchConverter converter = new Cql2JsonToOpenSearchConverter();
+				filterQryOpenSearch = converter.convertJsonAstToDsl(filterClause);
+			}
+			//Default is cql2-text
+			else
+			{
+				CqlTextToOpenSearchConverter converter = new CqlTextToOpenSearchConverter();
+				filterQryOpenSearch = converter.convertCqlToDsl(filterClause);
+			}			
+			//Replace fields with field mappings
+			filterQryOpenSearch = replaceFldWithFldMapping(filterQryOpenSearch);
+			
+		} catch (Exception ex) {
+			LOGGER.info("Filter clause could not be converted to opensearch qry: " + filterClause, ex);
 		}
-		filterQryBuf.append("]}}");
-		return filterQryBuf.toString();    
-  }
+		return filterQryOpenSearch;
+	}  
+  
+	private static String replaceFldWithFldMapping(String filterQryOpenSearch) {
+		
+		StacContext sc = StacContext.getInstance();
+		Map<String, String> fieldMapping = sc.getFieldMappings();
+		for(String fldKey:fieldMapping.keySet())
+		{
+			filterQryOpenSearch = filterQryOpenSearch.replace(fldKey, fieldMapping.get(fldKey));
+		}
+		filterQryOpenSearch = filterQryOpenSearch.replace("geometry", "shape_geo");
+		filterQryOpenSearch = filterQryOpenSearch.replace("datetime", FieldNames.FIELD_SYS_MODIFIED);
+		filterQryOpenSearch = filterQryOpenSearch.replace("updated", FieldNames.FIELD_SYS_MODIFIED);
+		filterQryOpenSearch = filterQryOpenSearch.replace("created", FieldNames.FIELD_SYS_CREATED);
+		
+		return filterQryOpenSearch;
+	}
+
 
 	private static StacItemValidationResponse validateId(JSONObject requestPayload,String collectionId) throws Exception {
 		String errorMsg;
@@ -618,7 +678,8 @@ public class StacHelper {
 		// geometry respectively,
 		if (!requestPayload.containsKey(FieldNames.FIELD_SHAPE_GEO)
 				&& requestPayload.containsKey(FieldNames.FIELD_GEOMETRY)) {
-			requestPayload.put(FieldNames.FIELD_SHAPE_GEO, requestPayload.get(FieldNames.FIELD_GEOMETRY));
+			JSONObject twoDGeoJson = extract2DGeoJson((JSONObject)requestPayload.get(FieldNames.FIELD_GEOMETRY));
+			requestPayload.put(FieldNames.FIELD_SHAPE_GEO, twoDGeoJson);
 		}
 
 		if (!requestPayload.containsKey(FieldNames.FIELD_ENVELOPE_GEO)
@@ -686,6 +747,111 @@ public class StacHelper {
 
 		return requestPayload;
 	}
+
+	private static JSONObject extract2DGeoJson(JSONObject geometry) {		
+        String type = geometry.getAsString("type");
+        type = type.toUpperCase();
+        JSONArray coordinates = (JSONArray) geometry.get("coordinates");
+        JSONObject modifiedObj = new JSONObject();
+        try {
+        	switch (type) {
+    		case "POINT":
+    			modifiedObj.put("type", "Point");
+    			modifiedObj.put("coordinates", extract2DPoint(coordinates));
+    			break;
+    		case "LINESTRING":
+    			modifiedObj.put("type", "LineString");
+    			modifiedObj.put("coordinates", extract2DLine(coordinates));
+    			break;
+    		case "POLYGON":
+    			modifiedObj.put("type", "Polygon");
+    			modifiedObj.put("coordinates", extract2DPolygon(coordinates));
+    			break;
+    		case "MULTIPOLYGON":
+    			modifiedObj.put("type", "MultiPolygon");
+    			modifiedObj.put("coordinates", extarct2DMultiPolygon(coordinates));
+    			break;
+    		case "MULTILINESTRING":
+    			modifiedObj.put("type", "MultiLineString");
+    			modifiedObj.put("coordinates", extarct2DMultiLineString(coordinates));
+    			break;
+    		default:
+    			//Return same as input geomtery
+    			modifiedObj = geometry;
+    			break;
+    		}
+        }
+		catch(Exception ex)
+        {
+			//If it is not able to extract 2D geoJSON, just save 3D.
+			LOGGER.info("Could not extract 2D geoJSON "+geometry.toString());
+			modifiedObj = geometry;
+        }
+		return modifiedObj;
+	}
+	
+	private static double toDouble(Object value) {
+	    if (value instanceof BigDecimal) {
+	        return ((BigDecimal) value).doubleValue();
+	    } else if (value instanceof Double) {
+	        return (Double) value;
+	    } else if (value instanceof Number) {
+	        return ((Number) value).doubleValue(); // covers Integer, Long, etc.
+	    } else {
+	        throw new IllegalArgumentException("Unsupported number type: " + value.getClass());
+	    }
+	}
+
+    private static List<List<List<Double>>> extarct2DMultiLineString(JSONArray coords) {
+        List<List<List<Double>>> extracted2D = new ArrayList<>();
+        for (Object lineObj : coords) {
+            JSONArray line = (JSONArray) lineObj;
+            extracted2D.add(extract2DLine(line));
+        }
+        return extracted2D;
+    }
+
+    private static List<List<List<List<Double>>>> extarct2DMultiPolygon(JSONArray coords) {
+        List<List<List<List<Double>>>> extracted2D = new ArrayList<>();
+        for (Object polygonObj : coords) {
+            JSONArray polygon = (JSONArray) polygonObj;
+            extracted2D.add(extract2DPolygon(polygon));
+        }
+        return extracted2D;
+    }
+
+    private static List<Double> extract2DPoint(JSONArray coords) {
+		return List.of(toDouble(coords.get(0)), toDouble(coords.get(1)));
+    }
+
+    private static List<List<Double>> extract2DLine(JSONArray coords) {
+        List<List<Double>> extracted2D = new ArrayList<>();
+
+		for (Object pointObj : coords) {
+			JSONArray point = (JSONArray) pointObj;
+			extracted2D
+					.add(List.of(toDouble(point.get(0)), toDouble(point.get(1))));
+		}
+        return extracted2D;
+    }
+
+	private static List<List<List<Double>>> extract2DPolygon(JSONArray coords) {
+		List<List<List<Double>>> extracted2D = new ArrayList<>();
+		for (Object ringObj : coords) {
+		        JSONArray ring = (JSONArray) ringObj;
+		        List<List<Double>> projectedRing = new ArrayList<>();
+		        for (Object pointObj : ring) {
+		            JSONArray point = (JSONArray) pointObj;
+		            projectedRing.add(List.of(
+		                toDouble(point.get(0)),
+		                toDouble(point.get(1))
+		            ));
+		        }
+		        extracted2D.add(projectedRing);
+		    }
+		return extracted2D;
+	}
+
 
 	private static ArrayList<String> checkGeomWKTToBeremoved(JSONObject prop, StacContext sc) {
 		ArrayList<String> toBeRemoved = new ArrayList<>();
@@ -1121,8 +1287,8 @@ public class StacHelper {
 			  List<String> geometryTypes = Arrays.asList("POINT", "MULTIPOINT", "LINESTRING","MULTILINESTRING", "POLYGON","MULTIPOLYGON");
 			  if(reqPayload.containsKey("geometry"))
 			  {
-				  double minLat = Double.MAX_VALUE, maxLat = Double.MIN_VALUE;
-			      double minLng = Double.MAX_VALUE, maxLng = Double.MIN_VALUE;
+				  double minLat = Double.MAX_VALUE, maxLat = -Double.MAX_VALUE;
+			      double minLng = Double.MAX_VALUE, maxLng = -Double.MAX_VALUE;
 			      
 				  JSONObject geometry = (JSONObject) reqPayload.get("geometry");
 				  String type = geometry.getAsString("type");

@@ -176,7 +176,7 @@ public class PublishMetadataRequest extends BulkEditRequest {
    * @param response the response
    * @param mdoc the metadata document
    */
-  @SuppressWarnings("unused")
+
   protected void prePublish(ElasticContext ec, AccessUtil au, AppResponse response, MetadataDocument mdoc) 
       throws Exception {
     mdoc.setRequiresXmlWrite(true);
@@ -237,6 +237,7 @@ public class PublishMetadataRequest extends BulkEditRequest {
       try {
         item = itemUtil.readItemJson(indexName,itemType,id);
       } catch (FileNotFoundException e) {
+    	  LOGGER.debug("item with id "+id+" not found ");
       }
     } else {
       if (fileid != null && fileid.length() > 0) {
@@ -245,7 +246,7 @@ public class PublishMetadataRequest extends BulkEditRequest {
     }
     
     // update sys info
-    if (item == null) {
+    if (item == null ||(item.containsKey("found") && !item.getBoolean("found"))) {
       this.setIsNew(true);
       if ((id != null) && (id.length() > 0)) {
         // TODO validate the id?
