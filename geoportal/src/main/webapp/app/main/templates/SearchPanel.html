@@ -79,14 +79,22 @@
           data-dojo-props="field:'sys_created_dt',interval:'day',allowHistogram:false,label:'Created'">
         </div>
         -->
+
+        <!-- WCOA Custom Changes: remove owner filter -->
+        <!--
         <div class="g-filter-collapse" data-dojo-type="app/search/TermsAggregation"
           data-dojo-props="field:'sys_owner_s',open:false,label:'${i18n.search.criteria.owner}'">
         </div>
+        -->
 
+        <!-- WCOA Custom Changes: remove topic category filter -->
+        <!--
         <div class="g-filter-collapse" data-dojo-type="app/search/TermsAggregation"
           data-dojo-props="field:'apiso_TopicCategory_s',open:false,label:'${i18n.search.criteria.topicCategory}'">
         </div>
+        -->
         
+        <!-- WCOA Custom Changes: include custom field in hierarchical category filter -->
         <div class="g-filter-collapse" data-dojo-type="app/search/HierarchyTree"
           data-dojo-props="
             field:'user_wcodpcategory_cat',
@@ -98,9 +106,12 @@
           data-dojo-props="field:'sys_metadatatype_s',label:'${i18n.search.criteria.metadataType}'">
         </div>
 
+        <!-- WCOA Custom Changes: remove organizations filter -->
+        <!--
         <div class="g-filter-collapse" data-dojo-type="app/search/TermsAggregation"
           data-dojo-props="field:'contact_organizations_s',label:'${i18n.search.criteria.organizations}'">
         </div>
+        -->
 
         <!-- e.g. field:'keywords_s',label:'Keywords',props:{size:20,min_doc_count:500} -->
         <div class="g-filter-collapse" data-dojo-type="app/search/TermsAggregation"

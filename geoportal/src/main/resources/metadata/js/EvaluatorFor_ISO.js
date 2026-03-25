@@ -121,6 +121,8 @@ G.evaluators.iso = {
    
 // //Example 1
   //  G.evalProps(task,item,root,"src_category_cat","//gmd:MD_TopicCategoryCode");
+  // WCOA Custom Changes: updated the XPath to point to the new location of the hierarchical category information in the metadata record
+  //  NOTE: in V2 we wrapped this in `if (item.apso_TopicCategory_s) {...`}
    G.evalProps(task,item,root,"user_wcodpcategory_cat","//gmd:MD_HierarchyCategoryCode");
 
 // //Example 2

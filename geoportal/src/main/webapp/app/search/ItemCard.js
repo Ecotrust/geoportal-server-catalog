@@ -930,6 +930,14 @@ function(declare, lang, array, string, topic, xhr, on,dojoQuery, appTopics, domS
 
       } else {
         var titleNode = this.titleNode;
+
+        // WCOA Custom Changes: if user_wcodptitle_s is present and not empty, use it as the title instead of title field
+        if (item.hasOwnProperty('user_wcodptitle_s') && item.user_wcodptitle_s && item.user_wcodptitle_s.length > 0) {
+          var innerHtml = item.user_wcodptitle_s;
+        } else {
+          var innerHtml = item.title
+        }
+        // end WCOA Custom Changes
         
         // generate link for the title:
         // 1 - if the item includes a links array then look for a link with rel=self
@@ -959,12 +967,15 @@ function(declare, lang, array, string, topic, xhr, on,dojoQuery, appTopics, domS
         
         var htmlNode = domConstruct.create("a",{
           href: theLink,
-          title: item.title,
-          "aria-label": item.title,
+          // title: item.title,
+          title: innerHtml,                   // WCOA Custom Change
+          // "aria-label": item.title ,
+          "aria-label": innerHtml ,           // WCOA Custom Change
           "target": theTarget,
           //innerHTML: item.title, 
         },titleNode);
-        htmlNode.appendChild(document.createTextNode(item.title));
+        // htmlNode.appendChild(document.createTextNode(item.title));
+        htmlNode.appendChild(document.createTextNode(innerHtml));         //WCOA Custom Change
         
         this.own(on(htmlNode, "click", lang.hitch({self: this, item: item}, function(evt){
           // if target = _blank, it means this is a STAC configuration and 
