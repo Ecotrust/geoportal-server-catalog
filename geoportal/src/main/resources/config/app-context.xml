@@ -20,7 +20,7 @@
     <beans:property name="supportsGroupBasedAccess" value="false" />
     <beans:property name="defaultAccessLevel" value="" /> <!-- optional - public|private -->
     <beans:property name="parseGml" value="false" />
-    <beans:property name="supportsCollections" value="true" />
+    <beans:property name="supportsCollections" value="false" />
     <beans:property name="geometryService" value="${gpt_geometryService:}" />
   </beans:bean>
   
