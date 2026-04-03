@@ -83,7 +83,7 @@ input {
   font-family: "Rajdhani SemiBold", "Open Sans", sans-serif;
   font-style: normal;
   font-weight: normal;
-  letter-spacing: 0.16rem;
+  letter-spacing: 0.1rem;
 }
 p,
 p span {
@@ -105,6 +105,11 @@ body {
 }
 
 /* HEADER - NAV */
+#app nav.g-header.navbar {
+  height: 100ox;
+  margin-bottom: 20px;
+}
+
 .g-header.navbar-inverse {
   min-height: 100px;
 }
@@ -132,13 +137,18 @@ body {
 .g-search-bar .search-box .input-group {
   border: 1px solid #ff3817;
   border-radius: 3px;
+  flex-wrap: inherit;
 }
 
 .g-search-bar .search-box .input-group input {
   width: calc(100% - 60px);
   padding: 8px 10px;
-  font-size: 14px;
-  font-family: "Rajdhani" "Open Sans", sans-serif;
+  font-size: 10px;
+  font-family: "Rajdhani", "Open Sans", sans-serif;
+}
+
+.g-search-bar .search-box .input-group #searchBox {
+  margin-left: inherit;
 }
 
 .g-search-bar .search-box .esri-icon-search {
@@ -286,7 +296,11 @@ body {
 
 /* SEARCH RESULTS PANE */
 .g-search-results-header {
-  height: 3rem;
+  height: 1.9rem;
+}
+
+.g-search-results {
+  padding: 0;
 }
 
 .g-paging-count {
@@ -307,16 +321,16 @@ body {
 }
 
 .g-item-card .g-item-description {
-  font-size: 1.4rem;
+  /* font-size: 1.4rem; */
   font-family: "Open Sans", sans-serif;
 }
 
 .g-item-card .g-item-actions {
-  font-size: 1.5rem;
+  font-size: 0.9rem;
 }
 
 .g-item-title {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   text-transform: uppercase;
   line-height: 28px;
   margin-top: 10px;
@@ -391,7 +405,7 @@ dl.card-details-list {
   overflow-y: auto;
   overflow-wrap: break-word;
   margin-bottom: 0;
-  font-size: 1.5rem;
+  /*font-size: 1.5rem;*/
   margin-left: 20px;
   text-transform: uppercase;
 }
@@ -517,8 +531,8 @@ span.dijitTreeLabel {
   color: black;
   font-size: 14px;
   border: 1px solid black;
-  border-radius: 0.5rem;
-  padding: 0.2rem 1.4rem 1.4rem 0.1rem;
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.85rem 1rem 0.1rem;
 }
 
 .calcite span.dijitInline.dijitTreeExpando:hover {
