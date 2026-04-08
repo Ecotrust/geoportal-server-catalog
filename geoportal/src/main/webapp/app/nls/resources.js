@@ -81,7 +81,7 @@ define({
         accessGroups: "Access Groups",
         missingSource: "Editor/Upload",
         createFilter: "Create Filter",
-        hierarchicalCategory: "Hierarchical Category",
+        hierarchicalCategory: "Category",
         collections: "Collections"
       },
       componentSettings: {
