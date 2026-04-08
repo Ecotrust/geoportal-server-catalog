@@ -36,7 +36,8 @@
   <beans:import resource="app-oauth.xml"/>
   <security:http realm="Geoportal" pattern="/**" authentication-manager-ref="authenticationManager">
     <security:headers>
-       <security:frame-options policy="SAMEORIGIN"/>
+       <security:frame-options policy="DENY"/>
+       <security:header name="Content-Security-Policy" value="frame-ancestors 'self' localhost localhost:* *.westcoastoceans.org *.ecotrust.org;" />
        <security:header name="Access-Control-Allow-Origin" value="*" />
        <security:header name="Access-Control-Allow-Headers" value="Content-Type, Authorization, X-Requested-With" />
     </security:headers>
