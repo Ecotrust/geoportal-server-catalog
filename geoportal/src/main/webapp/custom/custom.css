@@ -14,6 +14,8 @@
   font-family: 'OpenSans';
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-LightItalic-webfont.eot');
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-LightItalic-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-LightItalic-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-LightItalic-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-LightItalic-webfont.svg#OpenSans-LightItalic') format('svg');
+  src: url('./fonts/OpenSans/OpenSans-LightItalic-webfont.eot');
+  src: url('./fonts/OpenSans/OpenSans-LightItalic-webfont.eot?#iefix') format('embedded-opentype'), url('./fonts/OpenSans/OpenSans-LightItalic-webfont.woff') format('woff'), url('./fonts/OpenSans/OpenSans-LightItalic-webfont.ttf') format('truetype'), url('./fonts/OpenSans/OpenSans-LightItalic-webfont.svg#OpenSans-LightItalic') format('svg');
   font-weight: 200;
   font-style: italic;
 }
@@ -21,6 +23,8 @@
   font-family: 'OpenSans';
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Light-webfont.eot');
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Light-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Light-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Light-webfont.svg#OpenSans-Light') format('svg');
+  src: url('./fonts/OpenSans/OpenSans-Light-webfont.eot');
+  src: url('./fonts/OpenSans/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'), url('./fonts/OpenSans/OpenSans-Light-webfont.woff') format('woff'), url('./fonts/OpenSans/OpenSans-Light-webfont.ttf') format('truetype'), url('./fonts/OpenSans/OpenSans-Light-webfont.svg#OpenSans-Light') format('svg');
   font-weight: 200;
   font-style: normal;
 }
@@ -28,6 +32,8 @@
   font-family: 'OpenSans';
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-ExtraBold-webfont.eot');
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-ExtraBold-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-ExtraBold-webfont.svg#OpenSans-ExtraBold') format('svg');
+  src: url('./fonts/OpenSans/OpenSans-ExtraBold-webfont.eot');
+  src: url('./fonts/OpenSans/OpenSans-ExtraBold-webfont.eot?#iefix') format('embedded-opentype'), url('./fonts/OpenSans/OpenSans-ExtraBold-webfont.woff') format('woff'), url('./fonts/OpenSans/OpenSans-ExtraBold-webfont.ttf') format('truetype'), url('./fonts/OpenSans/OpenSans-ExtraBold-webfont.svg#OpenSans-ExtraBold') format('svg');
   font-weight: 900;
   font-style: normal;
 }
@@ -35,6 +41,8 @@
   font-family: 'OpenSans';
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Bold-webfont.eot');
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Bold-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Bold-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Bold-webfont.svg#OpenSans-Bold') format('svg');
+  src: url('./fonts/OpenSans/OpenSans-Bold-webfont.eot');
+  src: url('./fonts/OpenSans/OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'), url('./fonts/OpenSans/OpenSans-Bold-webfont.woff') format('woff'), url('./fonts/OpenSans/OpenSans-Bold-webfont.ttf') format('truetype'), url('./fonts/OpenSans/OpenSans-Bold-webfont.svg#OpenSans-Bold') format('svg');
   font-weight: 700;
   font-style: normal;
 }
@@ -42,6 +50,8 @@
   font-family: 'OpenSans';
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Italic-webfont.eot');
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Italic-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Italic-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Italic-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Italic-webfont.svg#OpenSans-Italic') format('svg');
+  src: url('./fonts/OpenSans/OpenSans-Italic-webfont.eot');
+  src: url('./fonts/OpenSans/OpenSans-Italic-webfont.eot?#iefix') format('embedded-opentype'), url('./fonts/OpenSans/OpenSans-Italic-webfont.woff') format('woff'), url('./fonts/OpenSans/OpenSans-Italic-webfont.ttf') format('truetype'), url('./fonts/OpenSans/OpenSans-Italic-webfont.svg#OpenSans-Italic') format('svg');
   font-weight: 400;
   font-style: italic;
 }
@@ -49,6 +59,8 @@
   font-family: 'OpenSans';
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Regular-webfont.eot');
   src: url('../../static/wcoa/fonts/OpenSans/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Regular-webfont.woff') format('woff'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Regular-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/OpenSans/OpenSans-Regular-webfont.svg#OpenSans-Regular') format('svg');
+  src: url('./fonts/OpenSans/OpenSans-Regular-webfont.eot');
+  src: url('./fonts/OpenSans/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('./fonts/OpenSans/OpenSans-Regular-webfont.woff') format('woff'), url('./fonts/OpenSans/OpenSans-Regular-webfont.ttf') format('truetype'), url('./fonts/OpenSans/OpenSans-Regular-webfont.svg#OpenSans-Regular') format('svg');
   font-weight: 400;
   font-style: normal;
 }
@@ -56,6 +68,8 @@
   font-family: 'PtMono';
   src: url('../../static/wcoa/fonts/PtMono/PtMono-Bold-webfont.eot');
   src: url('../../static/wcoa/fonts/PtMono/PtMono-Bold-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/PtMono/PtMono-Bold-webfont.woff') format('woff'), url('../../static/wcoa/fonts/PtMono/PtMono-Bold-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/PtMono/PtMono-Bold-webfont.svg#PtMono-Bold') format('svg');
+  src: url('./fonts/PtMono/PtMono-Bold-webfont.eot');
+  src: url('./fonts/PtMono/PtMono-Bold-webfont.eot?#iefix') format('embedded-opentype'), url('./fonts/PtMono/PtMono-Bold-webfont.woff') format('woff'), url('./fonts/PtMono/PtMono-Bold-webfont.ttf') format('truetype'), url('./fonts/PtMono/PtMono-Bold-webfont.svg#PtMono-Bold') format('svg');
   font-weight: 700;
   font-style: normal;
 }
@@ -63,20 +77,25 @@
   font-family: 'PtMono';
   src: url('../../static/wcoa/fonts/PtMono/PtMono-Regular-webfont.eot');
   src: url('../../static/wcoa/fonts/PtMono/PtMono-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('../../static/wcoa/fonts/PtMono/PtMono-Regular-webfont.woff') format('woff'), url('../../static/wcoa/fonts/PtMono/PtMono-Regular-webfont.ttf') format('truetype'), url('../../static/wcoa/fonts/PtMono/PtMono-Regular-webfont.svg#PtMono-Regular') format('svg');
+  src: url('./fonts/PtMono/PtMono-Regular-webfont.eot');
+  src: url('./custom/fonts/PtMono/PtMono-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('./fonts/PtMono/PtMono-Regular-webfont.woff') format('woff'), url('./fonts/PtMono/PtMono-Regular-webfont.ttf') format('truetype'), url('./fonts/PtMono/PtMono-Regular-webfont.svg#PtMono-Regular') format('svg');
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
   font-family: 'Rajdhani';
   src: url('../../static/wcoa/fonts/Rajdhani/Rajdhani-Regular.ttf');
+  src: url('./fonts/Rajdhani/Rajdhani-Regular.ttf');
 }
 @font-face {
   font-family: 'Rajdhani Bold';
   src: url('../../static/wcoa/fonts/Rajdhani/Rajdhani-Bold.ttf');
+  src: url('./fonts/Rajdhani/Rajdhani-Bold.ttf');
 }
 @font-face {
   font-family: 'Rajdhani SemiBold';
   src: url('../../static/wcoa/fonts/Rajdhani/Rajdhani-SemiBold.ttf');
+  src: url('./fonts/Rajdhani/Rajdhani-SemiBold.ttf');
 }
 *,
 input {
@@ -143,7 +162,7 @@ body {
 .g-search-bar .search-box .input-group input {
   width: calc(100% - 60px);
   padding: 8px 10px;
-  font-size: 10px;
+  font-size: 1rem;
   font-family: "Rajdhani", "Open Sans", sans-serif;
 }
 
@@ -163,7 +182,7 @@ body {
   background: transparent;
   color: transparent;
   border: none;
-  background-image: url("/static/wcoa/img/icons/black_search.png");
+  background-image: url("./images/black_search_backup.png"), url("./images/black_search.png");
   background-repeat: no-repeat;
   background-position: center center;
 }
@@ -499,6 +518,11 @@ img.bbox-spinner {
   border: 0 transparent none !important ;
 }
 
+/* Map View */
+div.g-search-pane-left div.g-filter-spatial div.dijitTitlePane div.dijitTitlePaneContentOuter div.dijitReset {
+  width: 100%;
+}
+
 
 /* Hierarchical Categories */
 div.g-entry-links > div.dijitTree {
@@ -553,6 +577,14 @@ span.dijitTreeLabel {
   text-decoration: underline;
 }
 
+@media (max-width: 1215px) {
+  /* HEADER - NAV */
+  #app nav.g-header.navbar {
+    height: 100px;
+    margin-bottom: 30px;
+  }
+} 
+
 @media (max-width: 767px) {
   body {
     padding-left: 20px;
@@ -564,6 +596,17 @@ span.dijitTreeLabel {
     padding-left: 15px;
     padding-right: 15px;
   }
+  .g-search-bar-row {
+    justify-content: left;
+  }
+
+  .g-search-bar .search-box {
+    width: 27vw;
+  } 
+
+  .g-search-bar .search-box .input-group input {
+    font-size: 1.4vw;
+  }
 }
 @media (min-width: 768px) {
   .g-search-bar,
@@ -573,11 +616,19 @@ span.dijitTreeLabel {
   .g-app {
     overflow-x: hidden;
   }
+
+  .g-search-bar .search-box .input-group input {
+    font-size: 0.8rem;
+  }
 }
 @media (min-width: 1020px) {
   .g-search-bar,
   .g-search-content-row {
     width: 970px;
+  }
+
+  .g-search-bar .search-box .input-group input {
+    font-size: 1rem;
   }
 }
 @media (min-width: 1215px) {
